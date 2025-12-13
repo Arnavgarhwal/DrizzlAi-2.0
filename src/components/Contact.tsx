@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Contact = () => {
@@ -36,7 +36,7 @@ export const Contact = () => {
               </div>
 
               {/* Contact Info */}
-              <div className="grid md:grid-cols-2 gap-8 pt-10 border-t border-border/50 max-w-2xl mx-auto">
+              <div className="grid md:grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-3xl mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
                     <Mail className="w-5 h-5 text-primary" />
@@ -55,6 +55,20 @@ export const Contact = () => {
                     <div className="font-medium">Mumbai, India</div>
                   </div>
                 </div>
+                <a 
+                  href="https://www.instagram.com/drizzlai/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center gap-3 group"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Instagram className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Follow Us</div>
+                    <div className="font-medium group-hover:text-primary transition-colors">@drizzlai</div>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
