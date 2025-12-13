@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { TiltCard } from "./TiltCard";
 
 const projects = [
   {
@@ -122,14 +123,16 @@ export const Work = () => {
           </div>
           
           {projects.map((project, index) => (
-            <div
+            <TiltCard
               key={project.title}
-              onClick={() => handleCardClick(index)}
+              index={index}
+              floatAnimation={false}
               className="absolute cursor-pointer transition-all duration-700 ease-out"
               style={{
                 ...getCardStyle(index),
                 transformStyle: 'preserve-3d',
               }}
+              onClick={() => handleCardClick(index)}
             >
               <div
                 className={`group relative overflow-hidden rounded-2xl bg-card border border-border/50 w-[320px] md:w-[400px] shadow-2xl transition-all duration-500 ${
@@ -138,9 +141,6 @@ export const Work = () => {
                     : 'hover:shadow-[0_25px_50px_-12px_hsl(var(--primary)/0.25)]'
                 }`}
               >
-                {/* 3D Glow Effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
                 <div className="relative">
                   <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
                     <img
@@ -165,7 +165,7 @@ export const Work = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
 
