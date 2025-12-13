@@ -1,4 +1,5 @@
 import { Linkedin, Twitter, Instagram } from "lucide-react";
+import { useState, useRef } from "react";
 
 const directors = [
   {
@@ -23,6 +24,64 @@ const directors = [
   },
 ];
 
+interface TiltCardProps {
+  children: React.ReactNode;
+  className?: string;
+  index: number;
+}
+
+const TiltCard = ({ children, className, index }: TiltCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [transform, setTransform] = useState("");
+  const [glowPosition, setGlowPosition] = useState({ x: 50, y: 50 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    
+    setTransform(`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
+    setGlowPosition({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 });
+  };
+
+  const handleMouseLeave = () => {
+    setTransform("");
+    setGlowPosition({ x: 50, y: 50 });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      className={className}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: transform || undefined,
+        transition: transform ? "transform 0.1s ease-out" : "transform 0.5s ease-out",
+        animation: transform ? "none" : `float-3d ${3 + index * 0.5}s ease-in-out infinite`,
+        animationDelay: `${index * 0.3}s`,
+      }}
+    >
+      {/* Dynamic Glow */}
+      <div 
+        className="absolute -inset-1 bg-gradient-to-r from-primary/40 via-accent/40 to-primary/40 rounded-3xl blur-xl transition-opacity duration-300"
+        style={{
+          opacity: transform ? 0.7 : 0,
+          background: `radial-gradient(circle at ${glowPosition.x}% ${glowPosition.y}%, hsl(var(--primary) / 0.5), hsl(var(--accent) / 0.3), transparent 70%)`,
+        }}
+      />
+      {children}
+    </div>
+  );
+};
+
 export const Directors = () => {
   return (
     <section id="directors" className="py-32 relative overflow-hidden">
@@ -46,21 +105,15 @@ export const Directors = () => {
         </div>
 
         {/* Directors Grid */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto" style={{ perspective: "1000px" }}>
           {directors.map((director, index) => (
-            <div
+            <TiltCard
               key={director.name}
               className="group relative"
-              style={{
-                animation: `float-3d ${3 + index * 0.5}s ease-in-out infinite`,
-                animationDelay: `${index * 0.3}s`,
-              }}
+              index={index}
             >
-              {/* 3D Glow Effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 rounded-3xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
-
               {/* Card */}
-              <div className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-3xl p-6 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2 hover:border-primary/30">
+              <div className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-3xl p-6 transition-all duration-300 hover:border-primary/30">
                 {/* Image Container */}
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-6 bg-secondary">
                   <img
@@ -111,7 +164,7 @@ export const Directors = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>
