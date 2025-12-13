@@ -4,19 +4,8 @@ import { Button } from "@/components/ui/button";
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Video Background */}
+      {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute w-full h-full object-cover"
-        >
-          <source src="/videos/hero-bg.mp4" type="video/mp4" />
-        </video>
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-background/70" />
         {/* Gradient glow effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-slow" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-[100px] animate-pulse-slow animate-delay-200" />
