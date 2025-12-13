@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "services": "Services",
+    "work": "Projets",
+    "blog": "Blog",
+    "about": "À Propos",
+    "contact": "Contact",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "title": "DrizzlAi",
+    "tagline": "Créer des expériences numériques qui inspirent",
+    "cta": "Commencer"
+  },
+  "services": {
+    "title": "Nos Services",
+    "subtitle": "Ce Que Nous Faisons",
+    "description": "Nous offrons une gamme complète de services numériques pour aider votre entreprise à prospérer dans le monde moderne."
+  },
+  "work": {
+    "title": "Nos Réalisations",
+    "subtitle": "Projets en Vedette",
+    "description": "Explorez notre portfolio de projets réussis qui démontrent notre expertise et notre créativité.",
+    "viewProject": "Voir le Projet",
+    "viewAll": "Voir Tous les Projets"
+  },
+  "testimonials": {
+    "title": "Témoignages Clients",
+    "subtitle": "Témoignages Vidéo",
+    "description": "Écoutez directement nos clients satisfaits parler de leur expérience de travail avec nous.",
+    "watchVideo": "Regarder la Vidéo"
+  },
+  "about": {
+    "title": "À Propos de Nous",
+    "subtitle": "Qui Sommes-Nous",
+    "description": "Nous sommes une équipe passionnée de designers et de développeurs dédiés à créer des expériences numériques exceptionnelles."
+  },
+  "contact": {
+    "title": "Contactez-Nous",
+    "subtitle": "Contact",
+    "description": "Prêt à démarrer votre projet? Contactez-nous et créons quelque chose d'incroyable ensemble.",
+    "name": "Nom",
+    "email": "E-mail",
+    "message": "Message",
+    "send": "Envoyer le Message"
+  },
+  "footer": {
+    "description": "Transformer les idées en expériences numériques exceptionnelles.",
+    "services": "Services",
+    "company": "Entreprise",
+    "resources": "Ressources",
+    "rights": "Tous droits réservés."
+  },
+  "common": {
+    "learnMore": "En Savoir Plus",
+    "readMore": "Lire Plus",
+    "seeAll": "Voir Tout"
+  }
+}
