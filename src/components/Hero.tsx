@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 export const Hero = () => {
   return (
@@ -17,24 +18,28 @@ export const Hero = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Heading */}
-          <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight animate-fade-up">
-            <span className="gradient-text">DrizzlAi</span>
-          </h1>
+          <ScrollReveal animation="scale" duration={0.8}>
+            <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight">
+              <span className="gradient-text">DrizzlAi</span>
+            </h1>
+          </ScrollReveal>
 
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto animate-fade-up animate-delay-100">
-            Crafting digital experiences that inspire.
-          </p>
+          <ScrollReveal animation="slideUp" delay={0.2}>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto">
+              Crafting digital experiences that inspire.
+            </p>
+          </ScrollReveal>
 
           {/* Single CTA */}
-          <div className="animate-fade-up animate-delay-200">
+          <ScrollReveal animation="slideUp" delay={0.4}>
             <a href="/get-started">
               <Button variant="hero" size="lg">
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </a>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
 

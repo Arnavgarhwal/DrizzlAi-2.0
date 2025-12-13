@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 
 const faqs = [
   {
@@ -39,7 +40,7 @@ export const FAQ = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <ScrollReveal animation="slideUp" className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-card/80 border border-border/50 rounded-full px-4 py-2 mb-6">
             <HelpCircle className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">FAQ'S</span>
@@ -50,12 +51,12 @@ export const FAQ = () => {
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
             Find quick answers to the most common support questions
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
           {/* Left Column - Contact Card */}
-          <div className="lg:col-span-2">
+          <ScrollReveal animation="slideLeft" className="lg:col-span-2">
             <div className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-3xl p-8 h-full flex flex-col items-center justify-center text-center">
               {/* Icon */}
               <div className="w-16 h-16 rounded-full border-2 border-dashed border-border/50 flex items-center justify-center mb-6">
@@ -77,26 +78,29 @@ export const FAQ = () => {
                 Ask A Question
               </a>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column - Accordion */}
           <div className="lg:col-span-3">
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem
-                  key={index}
-                  value={`item-${index}`}
-                  className="bg-card/40 backdrop-blur-sm border border-border/50 rounded-2xl px-6 data-[state=open]:border-primary/30 transition-colors duration-300"
-                >
-                  <AccordionTrigger className="text-left text-foreground hover:text-primary hover:no-underline py-5 text-base md:text-lg font-medium">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <StaggerContainer staggerDelay={0.1}>
+              <Accordion type="single" collapsible className="space-y-4">
+                {faqs.map((faq, index) => (
+                  <StaggerItem key={index}>
+                    <AccordionItem
+                      value={`item-${index}`}
+                      className="bg-card/40 backdrop-blur-sm border border-border/50 rounded-2xl px-6 data-[state=open]:border-primary/30 transition-colors duration-300"
+                    >
+                      <AccordionTrigger className="text-left text-foreground hover:text-primary hover:no-underline py-5 text-base md:text-lg font-medium">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </StaggerItem>
+                ))}
+              </Accordion>
+            </StaggerContainer>
           </div>
         </div>
       </div>
