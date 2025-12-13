@@ -18,7 +18,7 @@ const footerLinks = [
   },
   {
     title: "Resources",
-    links: ["Case Studies", "Pricing", "FAQ", "Support"],
+    links: ["Case Studies", "FAQ", "Support"],
   },
 ];
 

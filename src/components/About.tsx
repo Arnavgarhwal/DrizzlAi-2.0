@@ -25,18 +25,6 @@ export const About = () => {
                 />
               </div>
             </div>
-            {/* Floating Card */}
-            <div className="absolute -bottom-8 -right-8 bg-card border border-border rounded-2xl p-6 shadow-2xl animate-float">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                  <span className="text-3xl font-bold text-primary-foreground">5+</span>
-                </div>
-                <div>
-                  <div className="font-display font-bold text-lg">Years of</div>
-                  <div className="text-muted-foreground">Excellence</div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Right Column - Content */}

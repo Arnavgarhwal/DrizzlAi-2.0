@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Contact = () => {
@@ -33,29 +33,17 @@ export const Contact = () => {
                   Schedule a Call
                   <ArrowRight className="w-5 h-5" />
                 </Button>
-                <Button variant="heroOutline" size="lg">
-                  View Pricing
-                </Button>
               </div>
 
               {/* Contact Info */}
-              <div className="grid md:grid-cols-3 gap-8 pt-10 border-t border-border/50">
+              <div className="grid md:grid-cols-2 gap-8 pt-10 border-t border-border/50 max-w-2xl mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
                     <Mail className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Email Us</div>
-                    <div className="font-medium">hello@drizzleai.com</div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Call Us</div>
-                    <div className="font-medium">+1 (555) 123-4567</div>
+                    <div className="font-medium">hello.drizzleai@gmail.com</div>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-3">
@@ -64,7 +52,7 @@ export const Contact = () => {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Location</div>
-                    <div className="font-medium">San Francisco, CA</div>
+                    <div className="font-medium">Mumbai, India</div>
                   </div>
                 </div>
               </div>
