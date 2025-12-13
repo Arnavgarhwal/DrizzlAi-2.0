@@ -1,19 +1,22 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const navLinks = [
-  { name: "Services", href: "/services", isHash: false },
-  { name: "Work", href: "/work", isHash: false },
-  { name: "Blog", href: "/blog", isHash: false },
-  { name: "About", href: "/about", isHash: false },
-  { name: "Contact", href: "/contact", isHash: false },
+  { key: "services", href: "/services", isHash: false },
+  { key: "work", href: "/work", isHash: false },
+  { key: "blog", href: "/blog", isHash: false },
+  { key: "about", href: "/about", isHash: false },
+  { key: "contact", href: "/contact", isHash: false },
 ];
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { t } = useTranslation();
 
   const handleNavClick = (href: string, isHash: boolean) => {
     setIsOpen(false);
@@ -46,39 +49,40 @@ export const Navbar = () => {
             {navLinks.map((link, index) => (
               link.isHash ? (
                 <a
-                  key={link.name}
+                  key={link.key}
                   href={link.href}
                   onClick={() => handleNavClick(link.href, link.isHash)}
                   className="relative px-4 py-2 text-muted-foreground text-sm font-medium transition-all duration-300 hover:text-foreground group"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <span className="relative z-10 transition-transform duration-300 group-hover:-translate-y-0.5">
-                    {link.name}
+                    {t(`nav.${link.key}`)}
                   </span>
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/0 to-accent/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:from-primary/10 group-hover:to-accent/10 group-hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)] transform group-hover:scale-105" />
                   <div className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4 group-hover:left-[12.5%]" />
                 </a>
               ) : (
                 <Link
-                  key={link.name}
+                  key={link.key}
                   to={link.href}
                   className="relative px-4 py-2 text-muted-foreground text-sm font-medium transition-all duration-300 hover:text-foreground group"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <span className="relative z-10 transition-transform duration-300 group-hover:-translate-y-0.5">
-                    {link.name}
+                    {t(`nav.${link.key}`)}
                   </span>
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/0 to-accent/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:from-primary/10 group-hover:to-accent/10 group-hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.1)] transform group-hover:scale-105" />
                   <div className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4 group-hover:left-[12.5%]" />
                 </Link>
               )
             ))}
+            <LanguageSwitcher />
             <Button 
               variant="hero" 
               size="sm" 
-              className="ml-4 transform transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.4)]"
+              className="ml-2 transform transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.4)]"
             >
-              Get Started
+              {t("nav.getStarted")}
             </Button>
           </div>
 
@@ -98,26 +102,29 @@ export const Navbar = () => {
               {navLinks.map((link) => (
                 link.isHash ? (
                   <a
-                    key={link.name}
+                    key={link.key}
                     href={link.href}
                     className="text-muted-foreground hover:text-foreground transition-colors py-2 text-lg"
                     onClick={() => handleNavClick(link.href, link.isHash)}
                   >
-                    {link.name}
+                    {t(`nav.${link.key}`)}
                   </a>
                 ) : (
                   <Link
-                    key={link.name}
+                    key={link.key}
                     to={link.href}
                     className="text-muted-foreground hover:text-foreground transition-colors py-2 text-lg"
                     onClick={() => setIsOpen(false)}
                   >
-                    {link.name}
+                    {t(`nav.${link.key}`)}
                   </Link>
                 )
               ))}
+              <div className="py-2">
+                <LanguageSwitcher />
+              </div>
               <Button variant="hero" className="mt-4">
-                Get Started
+                {t("nav.getStarted")}
               </Button>
             </div>
           </div>

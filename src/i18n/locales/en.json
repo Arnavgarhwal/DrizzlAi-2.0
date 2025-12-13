@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "services": "Services",
+    "work": "Work",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "title": "DrizzlAi",
+    "tagline": "Crafting digital experiences that inspire",
+    "cta": "Get Started"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "What We Do",
+    "description": "We offer a comprehensive range of digital services to help your business thrive in the modern world."
+  },
+  "work": {
+    "title": "Our Work",
+    "subtitle": "Featured Projects",
+    "description": "Explore our portfolio of successful projects that showcase our expertise and creativity.",
+    "viewProject": "View Project",
+    "viewAll": "View All Projects"
+  },
+  "testimonials": {
+    "title": "Client Stories",
+    "subtitle": "Video Testimonials",
+    "description": "Hear directly from our satisfied clients about their experience working with us.",
+    "watchVideo": "Watch Video"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Who We Are",
+    "description": "We are a passionate team of designers and developers dedicated to creating exceptional digital experiences."
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Contact Us",
+    "description": "Ready to start your project? Reach out and let's create something amazing together.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send Message"
+  },
+  "footer": {
+    "description": "Transforming ideas into exceptional digital experiences.",
+    "services": "Services",
+    "company": "Company",
+    "resources": "Resources",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "readMore": "Read More",
+    "seeAll": "See All"
+  }
+}

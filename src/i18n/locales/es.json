@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "services": "Servicios",
+    "work": "Proyectos",
+    "blog": "Blog",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "getStarted": "Comenzar"
+  },
+  "hero": {
+    "title": "DrizzlAi",
+    "tagline": "Creando experiencias digitales que inspiran",
+    "cta": "Comenzar"
+  },
+  "services": {
+    "title": "Nuestros Servicios",
+    "subtitle": "Lo Que Hacemos",
+    "description": "Ofrecemos una gama completa de servicios digitales para ayudar a su negocio a prosperar en el mundo moderno."
+  },
+  "work": {
+    "title": "Nuestro Trabajo",
+    "subtitle": "Proyectos Destacados",
+    "description": "Explore nuestro portafolio de proyectos exitosos que muestran nuestra experiencia y creatividad.",
+    "viewProject": "Ver Proyecto",
+    "viewAll": "Ver Todos los Proyectos"
+  },
+  "testimonials": {
+    "title": "Historias de Clientes",
+    "subtitle": "Testimonios en Video",
+    "description": "Escuche directamente de nuestros clientes satisfechos sobre su experiencia trabajando con nosotros.",
+    "watchVideo": "Ver Video"
+  },
+  "about": {
+    "title": "Sobre Nosotros",
+    "subtitle": "Quiénes Somos",
+    "description": "Somos un equipo apasionado de diseñadores y desarrolladores dedicados a crear experiencias digitales excepcionales."
+  },
+  "contact": {
+    "title": "Contáctenos",
+    "subtitle": "Contacto",
+    "description": "¿Listo para comenzar su proyecto? Contáctenos y creemos algo increíble juntos.",
+    "name": "Nombre",
+    "email": "Correo",
+    "message": "Mensaje",
+    "send": "Enviar Mensaje"
+  },
+  "footer": {
+    "description": "Transformando ideas en experiencias digitales excepcionales.",
+    "services": "Servicios",
+    "company": "Empresa",
+    "resources": "Recursos",
+    "rights": "Todos los derechos reservados."
+  },
+  "common": {
+    "learnMore": "Saber Más",
+    "readMore": "Leer Más",
+    "seeAll": "Ver Todo"
+  }
+}

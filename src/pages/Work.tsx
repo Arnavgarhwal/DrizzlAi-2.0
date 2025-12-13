@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { VideoTestimonials } from "@/components/VideoTestimonials";
 
 // Animation variants
 const fadeInUp = {
@@ -402,6 +403,9 @@ const Work = () => {
           </motion.div>
         </div>
       </AnimatedSection>
+
+      {/* Video Testimonials Gallery */}
+      <VideoTestimonials />
 
       {/* CTA Section */}
       <AnimatedSection className="py-32 relative">
