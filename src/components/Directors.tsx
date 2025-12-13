@@ -1,23 +1,25 @@
-import { Linkedin, Twitter } from "lucide-react";
+import { Linkedin, Twitter, Instagram } from "lucide-react";
 
 const directors = [
   {
     name: "Alexander Mitchell",
     role: "CEO & Founder",
     post: "Chief Executive Officer",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    vision: "Building digital experiences that transform businesses and inspire innovation.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=face",
+    status: "Available for work",
     linkedin: "#",
     twitter: "#",
+    instagram: "#",
   },
   {
     name: "Sarah Williams",
     role: "Creative Director",
     post: "Chief Creative Officer",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
-    vision: "Crafting visual narratives that connect brands with their audiences meaningfully.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop&crop=face",
+    status: "Available for work",
     linkedin: "#",
     twitter: "#",
+    instagram: "#",
   },
 ];
 
@@ -55,49 +57,57 @@ export const Directors = () => {
               }}
             >
               {/* 3D Glow Effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 via-accent/50 to-primary/50 rounded-3xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 rounded-3xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
 
               {/* Card */}
-              <div className="relative bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl p-8 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2 hover:border-primary/30">
-                <div className="flex flex-col items-center text-center">
-                  {/* Photo */}
-                  <div className="relative mb-6">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary/50 transition-colors duration-300">
-                      <img
-                        src={director.image}
-                        alt={director.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                    </div>
-                    {/* Decorative Ring */}
-                    <div className="absolute -inset-2 border-2 border-dashed border-primary/20 rounded-full animate-spin-slow" />
+              <div className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-3xl p-6 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2 hover:border-primary/30">
+                {/* Image Container */}
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-6 bg-secondary">
+                  <img
+                    src={director.image}
+                    alt={director.name}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  
+                  {/* Status Badge */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full border border-border/30">
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-sm text-foreground/90 whitespace-nowrap">{director.status}</span>
                   </div>
+                </div>
 
-                  {/* Info */}
+                {/* Info */}
+                <div className="text-center">
                   <h3 className="font-display text-2xl font-bold text-foreground mb-1">
-                    {director.name}
+                    Hello I am <span className="gradient-text">{director.name.split(' ')[0]}</span>
                   </h3>
-                  <p className="text-primary font-semibold mb-1">{director.role}</p>
-                  <p className="text-muted-foreground text-sm mb-4">{director.post}</p>
-
-                  {/* Vision Quote */}
-                  <p className="text-muted-foreground italic text-sm leading-relaxed mb-6">
-                    "{director.vision}"
+                  <p className="text-primary/80 text-sm mb-6">
+                    {director.role} • {director.post}
                   </p>
 
-                  {/* Social Links */}
-                  <div className="flex gap-4">
-                    <a
-                      href={director.linkedin}
-                      className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
-                    >
-                      <Linkedin className="w-5 h-5" />
-                    </a>
+                  {/* Social Links with Dividers */}
+                  <div className="flex items-center justify-center gap-0">
                     <a
                       href={director.twitter}
-                      className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
+                      className="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-300"
                     >
                       <Twitter className="w-5 h-5" />
+                    </a>
+                    <div className="w-px h-6 bg-border/50" />
+                    <a
+                      href={director.instagram}
+                      className="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    >
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                    <div className="w-px h-6 bg-border/50" />
+                    <a
+                      href={director.linkedin}
+                      className="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    >
+                      <Linkedin className="w-5 h-5" />
                     </a>
                   </div>
                 </div>
