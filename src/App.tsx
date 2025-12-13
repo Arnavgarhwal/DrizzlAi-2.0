@@ -13,6 +13,7 @@ import Work from "./pages/Work";
 import ProjectDetail from "./pages/ProjectDetail";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
+import GetStarted from "./pages/GetStarted";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const AnimatedRoutes = () => {
         <Route path="/work/:id" element={<PageTransition><ProjectDetail /></PageTransition>} />
         <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/get-started" element={<PageTransition><GetStarted /></PageTransition>} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>

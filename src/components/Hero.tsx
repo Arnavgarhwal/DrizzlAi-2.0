@@ -28,10 +28,12 @@ export const Hero = () => {
 
           {/* Single CTA */}
           <div className="animate-fade-up animate-delay-200">
-            <Button variant="hero" size="lg">
-              Get Started
-              <ArrowRight className="w-5 h-5" />
-            </Button>
+            <a href="/get-started">
+              <Button variant="hero" size="lg">
+                Get Started
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </a>
           </div>
         </div>
       </div>
