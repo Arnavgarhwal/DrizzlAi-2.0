@@ -1,4 +1,5 @@
 import { Globe, Palette, Code, Layers, Zap, Shield } from "lucide-react";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 
 const services = [
   {
@@ -41,7 +42,7 @@ export const Services = () => {
       
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-20">
+        <ScrollReveal animation="slideUp" className="max-w-3xl mx-auto text-center mb-20">
           <span className="text-primary font-semibold text-sm uppercase tracking-wider">What We Do</span>
           <h2 className="font-display text-4xl md:text-5xl font-bold mt-4 mb-6">
             Services That
@@ -50,28 +51,26 @@ export const Services = () => {
           <p className="text-muted-foreground text-lg">
             From concept to launch, we provide end-to-end digital solutions that elevate your brand.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, index) => (
-            <div
-              key={service.title}
-              className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 card-hover cursor-pointer"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="w-14 h-14 rounded-xl bg-secondary flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
-                <service.icon className="w-7 h-7 text-primary" />
+        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
+          {services.map((service) => (
+            <StaggerItem key={service.title}>
+              <div className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 card-hover cursor-pointer h-full">
+                <div className="w-14 h-14 rounded-xl bg-secondary flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
+                  <service.icon className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="font-display text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
               </div>
-              <h3 className="font-display text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
-                {service.title}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {service.description}
-              </p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );
