@@ -190,15 +190,15 @@ export const ChatBot = () => {
             </div>
           ))}
           {isLoading && messages[messages.length - 1]?.role === "user" && (
-            <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
+            <div className="flex gap-3 animate-fade-in">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 animate-pulse-glow">
                 <Bot className="w-4 h-4 text-primary-foreground" />
               </div>
-              <div className="bg-secondary px-4 py-2.5 rounded-2xl rounded-tl-md">
-                <div className="flex gap-1">
-                  <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              <div className="bg-secondary px-4 py-3 rounded-2xl rounded-tl-md">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 bg-primary rounded-full animate-typing-dot" style={{ animationDelay: "0ms" }} />
+                  <span className="w-2 h-2 bg-primary rounded-full animate-typing-dot" style={{ animationDelay: "200ms" }} />
+                  <span className="w-2 h-2 bg-primary rounded-full animate-typing-dot" style={{ animationDelay: "400ms" }} />
                 </div>
               </div>
             </div>
