@@ -4,8 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { name: "Services", href: "/#services", isHash: true },
-  { name: "Work", href: "/#work", isHash: true },
+  { name: "Services", href: "/services", isHash: false },
+  { name: "Work", href: "/work", isHash: false },
   { name: "About", href: "/about", isHash: false },
   { name: "Contact", href: "/#contact", isHash: true },
 ];
