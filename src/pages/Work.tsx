@@ -54,39 +54,10 @@ const AnimatedSection = ({ children, className = "" }: { children: React.ReactNo
   );
 };
 
-// Projects data
-const projects = [
-  {
-    id: 1,
-    title: "TechFlow Dashboard",
-    category: "Web App",
-    description: "A comprehensive analytics dashboard for SaaS businesses with real-time data visualization.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-    tags: ["React", "TypeScript", "Tailwind CSS"],
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "FinanceHub",
-    category: "Web App",
-    description: "Personal finance management platform with budgeting tools and insights.",
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop",
-    tags: ["Vue.js", "Node.js", "PostgreSQL"],
-    featured: true,
-  },
-  {
-    id: 3,
-    title: "Creative Studio",
-    category: "Website",
-    description: "Portfolio website for a creative agency showcasing their work and services.",
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop",
-    tags: ["Next.js", "Framer Motion", "GSAP"],
-    featured: true,
-  },
-];
+import { projects, getFeaturedProjects } from "@/data/projects";
 
 // Categories for filter
-const categories = ["All", "Web App", "Website"];
+const categories = ["All", "Web App", "Website", "Web Design", "UI/UX Design", "Brand Identity", "App Development"];
 
 // Testimonials - Extended for infinite scroll
 const testimonials = [
@@ -289,57 +260,59 @@ const Work = () => {
                   whileHover={{ y: -10 }}
                   className="group relative"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300">
-                    {/* Image */}
-                    <div className="aspect-[4/3] relative overflow-hidden">
-                      <img 
-                        src={project.image} 
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      
-                      {/* Overlay Actions */}
-                      <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <motion.button 
-                          whileHover={{ scale: 1.1 }}
-                          className="w-12 h-12 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center"
-                        >
-                          <Eye className="w-5 h-5 text-foreground" />
-                        </motion.button>
-                        <motion.button 
-                          whileHover={{ scale: 1.1 }}
-                          className="w-12 h-12 rounded-full bg-primary flex items-center justify-center"
-                        >
-                          <ExternalLink className="w-5 h-5 text-primary-foreground" />
-                        </motion.button>
-                      </div>
-
-                      {/* Category Badge */}
-                      <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium">
-                          {project.category}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6">
-                      <h3 className="font-display text-xl font-semibold mb-2">{project.title}</h3>
-                      <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <span 
-                            key={tag}
-                            className="px-2 py-1 rounded-md bg-secondary/50 text-xs text-muted-foreground"
+                  <Link to={`/work/${project.id}`}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300">
+                      {/* Image */}
+                      <div className="aspect-[4/3] relative overflow-hidden">
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        
+                        {/* Overlay Actions */}
+                        <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <motion.div 
+                            whileHover={{ scale: 1.1 }}
+                            className="w-12 h-12 rounded-full bg-background/90 backdrop-blur-sm flex items-center justify-center"
                           >
-                            {tag}
+                            <Eye className="w-5 h-5 text-foreground" />
+                          </motion.div>
+                          <motion.div 
+                            whileHover={{ scale: 1.1 }}
+                            className="w-12 h-12 rounded-full bg-primary flex items-center justify-center"
+                          >
+                            <ExternalLink className="w-5 h-5 text-primary-foreground" />
+                          </motion.div>
+                        </div>
+
+                        {/* Category Badge */}
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium">
+                            {project.category}
                           </span>
-                        ))}
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-6">
+                        <h3 className="font-display text-xl font-semibold mb-2">{project.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.map((tag) => (
+                            <span 
+                              key={tag}
+                              className="px-2 py-1 rounded-md bg-secondary/50 text-xs text-muted-foreground"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </AnimatePresence>

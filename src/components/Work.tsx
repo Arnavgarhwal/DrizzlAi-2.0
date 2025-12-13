@@ -1,41 +1,22 @@
 import { ArrowUpRight } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { TiltCard } from "./TiltCard";
+import { projects } from "@/data/projects";
 
-const projects = [
-  {
-    title: "Nova Finance",
-    category: "Web Design & Development",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-  },
-  {
-    title: "Bloom Health",
-    category: "UI/UX Design",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop",
-  },
-  {
-    title: "TechVerse",
-    category: "Brand Identity",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
-  },
-  {
-    title: "ArtFlow Studio",
-    category: "Web Design",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",
-  },
-  {
-    title: "Quantum Labs",
-    category: "App Development",
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=600&fit=crop",
-  },
-];
+// Get first 5 projects for the carousel
+const carouselProjects = projects.slice(0, 5);
 
 export const Work = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const handleCardClick = (index: number) => {
-    if (isAnimating || index === activeIndex) return;
+  const handleCardClick = (index: number, projectId: string) => {
+    if (isAnimating) return;
+    if (index === activeIndex) {
+      // Navigate to project detail page when clicking the active card
+      return;
+    }
     setIsAnimating(true);
     setActiveIndex(index);
     setTimeout(() => setIsAnimating(false), 600);
@@ -44,14 +25,14 @@ export const Work = () => {
   const handleNext = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setActiveIndex((prev) => (prev + 1) % projects.length);
+    setActiveIndex((prev) => (prev + 1) % carouselProjects.length);
     setTimeout(() => setIsAnimating(false), 600);
   };
 
   const handlePrev = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
+    setActiveIndex((prev) => (prev - 1 + carouselProjects.length) % carouselProjects.length);
     setTimeout(() => setIsAnimating(false), 600);
   };
 
@@ -122,9 +103,9 @@ export const Work = () => {
             <div className="w-[600px] h-[400px] bg-primary/20 rounded-full blur-[100px] animate-pulse-slow" />
           </div>
           
-          {projects.map((project, index) => (
+          {carouselProjects.map((project, index) => (
             <TiltCard
-              key={project.title}
+              key={project.id}
               index={index}
               floatAnimation={false}
               className="absolute cursor-pointer transition-all duration-700 ease-out"
@@ -132,49 +113,75 @@ export const Work = () => {
                 ...getCardStyle(index),
                 transformStyle: 'preserve-3d',
               }}
-              onClick={() => handleCardClick(index)}
+              onClick={() => {
+                if (index !== activeIndex) {
+                  handleCardClick(index, project.id);
+                }
+              }}
             >
-              <div
-                className={`group relative overflow-hidden rounded-2xl bg-card border border-border/50 w-[320px] md:w-[400px] shadow-2xl transition-all duration-500 ${
-                  index === activeIndex 
-                    ? 'shadow-[0_30px_60px_-15px_hsl(var(--primary)/0.4)]' 
-                    : 'hover:shadow-[0_25px_50px_-12px_hsl(var(--primary)/0.25)]'
-                }`}
-              >
-                <div className="relative">
-                  <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                    />
+              {index === activeIndex ? (
+                <Link to={`/work/${project.id}`}>
+                  <div
+                    className={`group relative overflow-hidden rounded-2xl bg-card border border-border/50 w-[320px] md:w-[400px] shadow-2xl transition-all duration-500 shadow-[0_30px_60px_-15px_hsl(var(--primary)/0.4)]`}
+                  >
+                    <div className="relative">
+                      <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                      <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                        <span className="text-primary text-sm font-medium uppercase tracking-wider">{project.category}</span>
+                        <h3 className="font-display text-xl md:text-2xl font-bold mt-2 text-foreground drop-shadow-lg">{project.title}</h3>
+                      </div>
+                      <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100 shadow-[0_10px_30px_hsl(var(--primary)/0.4)]">
+                        <ArrowUpRight className="w-4 h-4 text-primary-foreground" />
+                      </div>
+                    </div>
                   </div>
-                  
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
-                  
-                  {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                    <span className="text-primary text-sm font-medium uppercase tracking-wider">{project.category}</span>
-                    <h3 className="font-display text-xl md:text-2xl font-bold mt-2 text-foreground drop-shadow-lg">{project.title}</h3>
-                  </div>
-                  
-                  {/* Arrow Button */}
-                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100 shadow-[0_10px_30px_hsl(var(--primary)/0.4)]">
-                    <ArrowUpRight className="w-4 h-4 text-primary-foreground" />
+                </Link>
+              ) : (
+                <div
+                  className={`group relative overflow-hidden rounded-2xl bg-card border border-border/50 w-[320px] md:w-[400px] shadow-2xl transition-all duration-500 hover:shadow-[0_25px_50px_-12px_hsl(var(--primary)/0.25)]`}
+                >
+                  <div className="relative">
+                    <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                      <span className="text-primary text-sm font-medium uppercase tracking-wider">{project.category}</span>
+                      <h3 className="font-display text-xl md:text-2xl font-bold mt-2 text-foreground drop-shadow-lg">{project.title}</h3>
+                    </div>
+                    <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100 shadow-[0_10px_30px_hsl(var(--primary)/0.4)]">
+                      <ArrowUpRight className="w-4 h-4 text-primary-foreground" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </TiltCard>
           ))}
         </div>
 
         {/* Navigation Dots */}
         <div className="flex justify-center gap-3 mt-8">
-          {projects.map((_, index) => (
+          {carouselProjects.map((project, index) => (
             <button
-              key={index}
-              onClick={() => handleCardClick(index)}
+              key={project.id}
+              onClick={() => {
+                if (!isAnimating && index !== activeIndex) {
+                  setIsAnimating(true);
+                  setActiveIndex(index);
+                  setTimeout(() => setIsAnimating(false), 600);
+                }
+              }}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === activeIndex 
                   ? 'bg-primary scale-125 shadow-[0_0_15px_hsl(var(--primary)/0.6)]' 
