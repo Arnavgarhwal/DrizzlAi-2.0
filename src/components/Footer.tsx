@@ -1,4 +1,5 @@
 import { Github, Linkedin, Instagram } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // X (formerly Twitter) icon component
 const XIcon = ({ className }: { className?: string }) => (
@@ -17,15 +18,29 @@ const socialLinks = [
 const footerLinks = [
   {
     title: "Services",
-    links: ["Web Design", "UI/UX Design", "Development", "Branding"],
+    links: [
+      { label: "Web Design", href: "/services" },
+      { label: "UI/UX Design", href: "/services" },
+      { label: "Development", href: "/services" },
+      { label: "Branding", href: "/services" },
+    ],
   },
   {
     title: "Company",
-    links: ["About Us", "Careers", "Blog", "Contact"],
+    links: [
+      { label: "About Us", href: "/about" },
+      { label: "Careers", href: "/contact" },
+      { label: "Blog", href: "/blog" },
+      { label: "Contact", href: "/contact" },
+    ],
   },
   {
     title: "Resources",
-    links: ["Case Studies", "FAQ", "Support"],
+    links: [
+      { label: "Case Studies", href: "/work" },
+      { label: "FAQ", href: "/contact" },
+      { label: "Support", href: "/contact" },
+    ],
   },
 ];
 
@@ -65,13 +80,13 @@ export const Footer = () => {
               <h3 className="font-display font-semibold mb-4">{column.title}</h3>
               <ul className="space-y-3">
                 {column.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
                       className="text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
