@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
 
 const features = [
   "Custom design tailored to your brand",
@@ -12,8 +13,11 @@ const features = [
 
 export const About = () => {
   return (
-    <section id="about" className="py-32 relative">
-      <div className="container mx-auto px-6">
+    <section id="about" className="py-32 relative overflow-hidden">
+      {/* Parallax Background */}
+      <ParallaxBackground variant="gradient" intensity={0.6} />
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Column - Image */}
           <ScrollReveal animation="slideLeft">

@@ -6,6 +6,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
 
 const faqs = [
   {
@@ -32,16 +33,14 @@ const faqs = [
 
 export const FAQ = () => {
   return (
-    <section id="faq" className="py-32 relative">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
-      </div>
+    <section id="faq" className="py-32 relative overflow-hidden">
+      {/* Parallax Background */}
+      <ParallaxBackground variant="orbs" intensity={0.5} />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <ScrollReveal animation="slideUp" className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-card/80 border border-border/50 rounded-full px-4 py-2 mb-6">
+          <div className="inline-flex items-center gap-2 bg-card/80 backdrop-blur-sm border border-border/50 rounded-full px-4 py-2 mb-6">
             <HelpCircle className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm text-muted-foreground">FAQ'S</span>
           </div>
