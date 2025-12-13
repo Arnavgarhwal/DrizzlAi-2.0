@@ -43,7 +43,7 @@ export const Contact = () => {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Email Us</div>
-                    <div className="font-medium">hello.drizzleai@gmail.com</div>
+                    <div className="font-medium">hello.drizzlai@gmail.com</div>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-3">

@@ -18,7 +18,7 @@ export const Hero = () => {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Heading */}
           <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight animate-fade-up">
-            <span className="gradient-text">DrizzleAi</span>
+            <span className="gradient-text">DrizzlAi</span>
           </h1>
 
           {/* Subheading */}

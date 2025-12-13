@@ -43,7 +43,7 @@ export const Directors = () => {
             Director's <span className="gradient-text">Vision</span>
           </h2>
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-            Meet the visionaries behind DrizzleAi who drive innovation and excellence
+            Meet the visionaries behind DrizzlAi who drive innovation and excellence
           </p>
         </div>
 

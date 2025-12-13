@@ -33,7 +33,7 @@ export const Footer = () => {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                 <span className="text-primary-foreground font-display font-bold text-lg">D</span>
               </div>
-              <span className="font-display font-bold text-xl">DrizzleAi</span>
+              <span className="font-display font-bold text-xl">DrizzlAi</span>
             </a>
             <p className="text-muted-foreground mb-6 max-w-sm">
               Transforming ideas into stunning digital experiences. Let's create something amazing together.
@@ -75,7 +75,7 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} DrizzleAi. All rights reserved.
+            © {new Date().getFullYear()} DrizzlAi. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm">
             <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
