@@ -1,5 +1,6 @@
 import { Globe, Palette, Code, Layers, Zap, Shield } from "lucide-react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
 
 const services = [
   {
@@ -36,11 +37,14 @@ const services = [
 
 export const Services = () => {
   return (
-    <section id="services" className="py-32 relative">
+    <section id="services" className="py-32 relative overflow-hidden">
+      {/* Parallax Background */}
+      <ParallaxBackground variant="shapes" intensity={0.8} />
+      
       {/* Background Gradient */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <ScrollReveal animation="slideUp" className="max-w-3xl mx-auto text-center mb-20">
           <span className="text-primary font-semibold text-sm uppercase tracking-wider">What We Do</span>
@@ -57,7 +61,7 @@ export const Services = () => {
         <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
           {services.map((service) => (
             <StaggerItem key={service.title}>
-              <div className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 card-hover cursor-pointer h-full">
+              <div className="group p-8 rounded-2xl bg-card/80 backdrop-blur-sm border border-border hover:border-primary/50 card-hover cursor-pointer h-full">
                 <div className="w-14 h-14 rounded-xl bg-secondary flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
                   <service.icon className="w-7 h-7 text-primary" />
                 </div>

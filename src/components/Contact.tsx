@@ -1,12 +1,16 @@
 import { ArrowRight, Mail, MapPin, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
+import { ParallaxBackground, FloatingParticles } from "@/components/ParallaxBackground";
 
 export const Contact = () => {
   return (
-    <section id="contact" className="py-32 relative">
-      {/* Background */}
+    <section id="contact" className="py-32 relative overflow-hidden">
+      {/* Parallax Backgrounds */}
       <div className="absolute inset-0 bg-gradient-to-b from-secondary/50 to-background" />
+      <ParallaxBackground variant="shapes" intensity={0.7} />
+      <FloatingParticles count={10} />
+      
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       
       <div className="container mx-auto px-6 relative z-10">
