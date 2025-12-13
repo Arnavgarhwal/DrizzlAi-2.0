@@ -12,6 +12,7 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import { AppointmentBooking } from "@/components/AppointmentBooking";
 import { LiveChat } from "@/components/LiveChat";
 import { PageLoader } from "@/components/PageLoader";
+import { SocialProofWidget } from "@/components/SocialProofWidget";
 
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
@@ -60,6 +61,7 @@ const App = () => (
           </Suspense>
           <AppointmentBooking />
           <LiveChat />
+          <SocialProofWidget />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
