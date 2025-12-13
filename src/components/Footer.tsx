@@ -4,7 +4,7 @@ const socialLinks = [
   { icon: Twitter, href: "#", label: "Twitter" },
   { icon: Github, href: "#", label: "GitHub" },
   { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Instagram, href: "https://www.instagram.com/drizzlai/", label: "Instagram" },
 ];
 
 const footerLinks = [
