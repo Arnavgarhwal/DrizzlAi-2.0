@@ -115,7 +115,7 @@ const projects = [
 // Categories for filter
 const categories = ["All", "Web App", "Mobile App", "E-commerce", "Website"];
 
-// Testimonials
+// Testimonials - Extended for infinite scroll
 const testimonials = [
   {
     quote: "DrizzlAi transformed our digital presence completely. The attention to detail and creativity exceeded our expectations.",
@@ -134,6 +134,24 @@ const testimonials = [
     author: "Emily Rodriguez",
     role: "Product Lead, Mindful",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+  },
+  {
+    quote: "Exceptional work on our brand identity. DrizzlAi captured our vision perfectly and delivered beyond expectations.",
+    author: "David Park",
+    role: "Marketing Director, Nexus",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+  },
+  {
+    quote: "The website they built for us has significantly increased our conversion rates. Highly recommend their services!",
+    author: "Lisa Thompson",
+    role: "COO, GrowthLab",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
+  },
+  {
+    quote: "Professional, creative, and incredibly responsive. DrizzlAi is our go-to partner for all digital projects.",
+    author: "James Wilson",
+    role: "CTO, InnovateTech",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
   },
 ];
 
@@ -356,12 +374,12 @@ const Work = () => {
         </div>
       </AnimatedSection>
 
-      {/* Testimonials Section */}
-      <AnimatedSection className="py-32 relative bg-secondary/20">
+      {/* Testimonials Section - Floating Infinite Carousel */}
+      <AnimatedSection className="py-32 relative bg-secondary/20 overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         
-        <div className="container mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="container mx-auto px-6 mb-16">
+          <div className="text-center max-w-3xl mx-auto">
             <SectionBadge>Testimonials</SectionBadge>
             <motion.h2 variants={fadeInUp} className="font-display text-4xl md:text-5xl font-bold mb-6">
               What Our Clients Say
@@ -370,30 +388,69 @@ const Work = () => {
               Don't just take our word for it — hear from some of our amazing clients.
             </motion.p>
           </div>
+        </div>
 
-          <motion.div 
-            variants={staggerContainer}
-            className="grid md:grid-cols-3 gap-8"
+        {/* Infinite Scrolling Carousel - Row 1 (Left to Right) */}
+        <div className="relative mb-8">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="flex gap-6"
           >
-            {testimonials.map((testimonial) => (
+            {[...testimonials, ...testimonials].map((testimonial, index) => (
               <motion.div
-                key={testimonial.author}
-                variants={scaleIn}
-                whileHover={{ y: -5 }}
-                className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl p-8 hover:border-primary/30 transition-all"
+                key={`row1-${index}`}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="flex-shrink-0 w-[400px] bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6 hover:border-primary/30 transition-all cursor-pointer group"
               >
-                <p className="text-foreground mb-6 leading-relaxed">"{testimonial.quote}"</p>
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-4 mb-4">
                   <img 
                     src={testimonial.image} 
                     alt={testimonial.author}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/50 transition-all"
                   />
                   <div>
-                    <div className="font-semibold">{testimonial.author}</div>
+                    <div className="font-semibold text-foreground">{testimonial.author}</div>
                     <div className="text-sm text-muted-foreground">{testimonial.role}</div>
                   </div>
                 </div>
+                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">"{testimonial.quote}"</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Infinite Scrolling Carousel - Row 2 (Right to Left) */}
+        <div className="relative">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          
+          <motion.div
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+            className="flex gap-6"
+          >
+            {[...testimonials.slice(3), ...testimonials.slice(0, 3), ...testimonials.slice(3), ...testimonials.slice(0, 3)].map((testimonial, index) => (
+              <motion.div
+                key={`row2-${index}`}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="flex-shrink-0 w-[400px] bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6 hover:border-primary/30 transition-all cursor-pointer group"
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.author}
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/50 transition-all"
+                  />
+                  <div>
+                    <div className="font-semibold text-foreground">{testimonial.author}</div>
+                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                  </div>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">"{testimonial.quote}"</p>
               </motion.div>
             ))}
           </motion.div>
