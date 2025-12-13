@@ -135,7 +135,7 @@ export const ChatBot = () => {
               <Bot className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
-              <div className="font-display font-semibold text-foreground">DrizzleAi Assistant</div>
+              <div className="font-display font-semibold text-foreground">DrizzlAi Assistant</div>
               <div className="text-xs text-muted-foreground">Online • Ready to help</div>
             </div>
           </div>
@@ -156,7 +156,7 @@ export const ChatBot = () => {
                 <Bot className="w-8 h-8 text-primary" />
               </div>
               <p className="text-muted-foreground text-sm">
-                Hi! I'm DrizzleAi's assistant. How can I help you today?
+                Hi! I'm DrizzlAi's assistant. How can I help you today?
               </p>
             </div>
           )}

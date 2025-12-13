@@ -35,7 +35,7 @@ export const About = () => {
               <span className="gradient-text"> Excellence</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              At DrizzleAi, we're passionate about creating digital experiences that leave lasting impressions. 
+              At DrizzlAi, we're passionate about creating digital experiences that leave lasting impressions. 
               Our team of designers and developers work together to transform your ideas into stunning, 
               functional websites that drive real results.
             </p>

@@ -22,7 +22,7 @@ export const Navbar = () => {
               <span className="text-primary-foreground font-display font-bold text-xl">D</span>
             </div>
             <span className="font-display font-bold text-xl text-foreground transition-all duration-300 group-hover:text-primary group-hover:tracking-wider">
-              DrizzleAi
+              DrizzlAi
             </span>
           </a>
 
