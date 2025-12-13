@@ -34,10 +34,6 @@ export const Hero = () => {
           </div>
 
           {/* Heading */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 animate-fade-up animate-delay-100">
-            We Design
-            <span className="gradient-text block">Digital Experiences</span>
-          </h1>
 
           {/* Subheading */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up animate-delay-200">
