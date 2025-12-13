@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 interface PageTransitionProps {
   children: ReactNode;
@@ -29,12 +29,20 @@ const pageVariants = {
 };
 
 export const PageTransition = ({ children }: PageTransitionProps) => {
+  // Scroll to top when this component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+
   return (
     <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
+      onAnimationStart={() => {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }}
     >
       {children}
     </motion.div>
