@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
   { key: "services", href: "/services", isHash: false },
@@ -77,6 +78,7 @@ export const Navbar = () => {
               )
             ))}
             <LanguageSwitcher />
+            <ThemeToggle />
             <Button 
               variant="hero" 
               size="sm" 
@@ -120,8 +122,9 @@ export const Navbar = () => {
                   </Link>
                 )
               ))}
-              <div className="py-2">
+              <div className="py-2 flex items-center gap-3">
                 <LanguageSwitcher />
+                <ThemeToggle />
               </div>
               <Button variant="hero" className="mt-4">
                 {t("nav.getStarted")}
