@@ -67,53 +67,26 @@ const projects = [
   },
   {
     id: 2,
-    title: "Luxe Ecommerce",
-    category: "E-commerce",
-    description: "Premium fashion e-commerce platform with seamless checkout experience.",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop",
-    tags: ["Next.js", "Stripe", "Supabase"],
-    featured: true,
-  },
-  {
-    id: 3,
-    title: "Mindful App",
-    category: "Mobile App",
-    description: "Meditation and wellness app designed to promote mental health and mindfulness.",
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop",
-    tags: ["React Native", "Firebase", "Animations"],
-    featured: true,
-  },
-  {
-    id: 4,
     title: "FinanceHub",
     category: "Web App",
     description: "Personal finance management platform with budgeting tools and insights.",
     image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop",
     tags: ["Vue.js", "Node.js", "PostgreSQL"],
-    featured: false,
+    featured: true,
   },
   {
-    id: 5,
-    title: "Foodie Delivery",
-    category: "Mobile App",
-    description: "Food delivery application with real-time tracking and restaurant discovery.",
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=600&fit=crop",
-    tags: ["Flutter", "Maps API", "Firebase"],
-    featured: false,
-  },
-  {
-    id: 6,
+    id: 3,
     title: "Creative Studio",
     category: "Website",
     description: "Portfolio website for a creative agency showcasing their work and services.",
     image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop",
     tags: ["Next.js", "Framer Motion", "GSAP"],
-    featured: false,
+    featured: true,
   },
 ];
 
 // Categories for filter
-const categories = ["All", "Web App", "Mobile App", "E-commerce", "Website"];
+const categories = ["All", "Web App", "Website"];
 
 // Testimonials - Extended for infinite scroll
 const testimonials = [
