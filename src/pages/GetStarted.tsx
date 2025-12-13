@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
-
+import { supabase } from "@/integrations/supabase/client";
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
@@ -83,17 +83,43 @@ const GetStarted = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Request Submitted!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    
-    setFormData({ name: "", email: "", company: "", service: "", budget: "", message: "" });
-    setIsSubmitting(false);
+
+    try {
+      // Send Discord notification
+      const { error } = await supabase.functions.invoke('discord-notify', {
+        body: {
+          type: 'inquiry',
+          data: {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            company: formData.company.trim() || 'Not provided',
+            service: formData.service || 'Not specified',
+            budget: formData.budget.trim() || 'Not provided',
+            message: formData.message.trim(),
+          },
+        },
+      });
+
+      if (error) {
+        console.error('Discord notification error:', error);
+      }
+
+      toast({
+        title: "Request Submitted!",
+        description: "We'll get back to you within 24 hours.",
+      });
+
+      setFormData({ name: "", email: "", company: "", service: "", budget: "", message: "" });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Request Submitted!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      setFormData({ name: "", email: "", company: "", service: "", budget: "", message: "" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
