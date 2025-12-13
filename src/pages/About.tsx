@@ -315,6 +315,57 @@ const About = () => {
         </motion.div>
       </motion.section>
 
+      {/* Visual Story Section - Bento Grid */}
+      <AnimatedSection className="py-24 relative">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left Column */}
+            <motion.div variants={fadeInUp} className="space-y-8">
+              {/* Large Portrait Image */}
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1000&fit=crop"
+                  alt="Team member working"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Text below portrait */}
+              <motion.p 
+                variants={fadeInUp}
+                className="font-display text-2xl md:text-3xl leading-relaxed"
+              >
+                We believe that the human dimensions are essential to start any successful{" "}
+                <em className="text-muted-foreground italic">project and that this is where splendid</em>{" "}
+                emotional relationships between the company and people are born.
+              </motion.p>
+            </motion.div>
+
+            {/* Right Column */}
+            <motion.div variants={fadeInUp} className="space-y-8 lg:pt-24">
+              {/* Text with italic styling */}
+              <motion.p 
+                variants={fadeInUp}
+                className="font-display text-2xl md:text-3xl leading-relaxed"
+              >
+                Intuition and strategy integrate the{" "}
+                <em className="text-muted-foreground italic">research methodology</em>{" "}
+                to traditional media, that we also apply
+              </motion.p>
+              
+              {/* Team workspace image */}
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
+                  alt="Team collaboration"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </AnimatedSection>
+
       {/* Who We Are Section */}
       <AnimatedSection className="py-32 relative">
         <div className="container mx-auto px-6">
