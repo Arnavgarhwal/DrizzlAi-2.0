@@ -15,6 +15,9 @@ interface NotificationRequest {
     consultationType?: string;
     date?: string;
     time?: string;
+    company?: string;
+    service?: string;
+    budget?: string;
   };
 }
 
@@ -56,10 +59,25 @@ const handler = async (req: Request): Promise<Response> => {
         timestamp: new Date().toISOString(),
         footer: { text: "DrizzlAi Booking System" },
       };
-    } else if (type === "inquiry" || type === "contact") {
+    } else if (type === "inquiry") {
       embed = {
-        title: type === "inquiry" ? "💼 New Project Inquiry!" : "📬 New Contact Message!",
-        color: type === "inquiry" ? 0x9B59B6 : 0x2ECC71,
+        title: "💼 New Project Inquiry!",
+        color: 0x9B59B6, // Purple color
+        fields: [
+          { name: "👤 Name", value: data.name || "Not provided", inline: true },
+          { name: "📧 Email", value: data.email || "Not provided", inline: true },
+          { name: "🏢 Company", value: data.company || "Not provided", inline: true },
+          { name: "🎯 Service", value: data.service || "Not specified", inline: true },
+          { name: "💰 Budget", value: data.budget || "Not provided", inline: true },
+          { name: "📝 Project Details", value: data.message || "No details", inline: false },
+        ],
+        timestamp: new Date().toISOString(),
+        footer: { text: "DrizzlAi Get Started Form" },
+      };
+    } else if (type === "contact") {
+      embed = {
+        title: "📬 New Contact Message!",
+        color: 0x2ECC71, // Green color
         fields: [
           { name: "👤 Name", value: data.name || "Not provided", inline: true },
           { name: "📧 Email", value: data.email || "Not provided", inline: true },
