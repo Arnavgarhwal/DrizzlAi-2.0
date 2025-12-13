@@ -140,44 +140,132 @@ const About = () => {
     offset: ["start start", "end start"]
   });
   
+  // Parallax transforms for different layers
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
+  
+  // Multi-layer parallax speeds
+  const layer1Y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const layer2Y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const layer3Y = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const layer4Y = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const layer5Y = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  
+  // Rotation parallax
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 45]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -30]);
+  const rotate3 = useTransform(scrollYProgress, [0, 1], [0, 20]);
+  
+  // Scale parallax
+  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
+  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
       
-      {/* Hero Section - Full Page */}
+      {/* Hero Section - Full Page with Parallax */}
       <motion.section 
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
         className="min-h-screen flex items-center justify-center relative overflow-hidden"
       >
-        {/* Background Effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] animate-pulse" />
-          <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
-        </div>
+        {/* Parallax Background Layer 1 - Deepest/Slowest */}
+        <motion.div 
+          style={{ y: layer1Y }}
+          className="absolute inset-0 pointer-events-none"
+        >
+          <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[200px]" />
+          <div className="absolute bottom-[10%] right-[5%] w-[500px] h-[500px] bg-accent/5 rounded-full blur-[180px]" />
+        </motion.div>
 
-        {/* Floating 3D Elements */}
+        {/* Parallax Background Layer 2 */}
         <motion.div 
-          animate={{ y: [-20, 20, -20], rotateZ: [0, 5, 0] }}
+          style={{ y: layer2Y, scale: scale1 }}
+          className="absolute inset-0 pointer-events-none"
+        >
+          <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-accent/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
+        </motion.div>
+
+        {/* Grid Pattern - Layer 3 */}
+        <motion.div 
+          style={{ y: layer3Y }}
+          className="absolute inset-0 bg-[linear-gradient(hsl(var(--border)/0.15)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.15)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_60%)] pointer-events-none"
+        />
+
+        {/* Floating 3D Elements - Layer 4 */}
+        <motion.div 
+          style={{ y: layer4Y, rotate: rotate1 }}
+          animate={{ y: [-20, 20, -20] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-[10%] w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 backdrop-blur-sm"
-          style={{ transform: "perspective(1000px) rotateX(15deg) rotateY(-15deg)" }}
+          className="absolute top-1/4 left-[10%] w-24 h-24 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 backdrop-blur-sm"
         />
         <motion.div 
-          animate={{ y: [20, -20, 20], rotateZ: [0, -5, 0] }}
+          style={{ y: layer4Y, rotate: rotate2, scale: scale2 }}
+          animate={{ y: [20, -20, 20] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 right-[15%] w-16 h-16 rounded-xl bg-gradient-to-br from-accent/20 to-primary/20 border border-accent/20 backdrop-blur-sm"
-          style={{ transform: "perspective(1000px) rotateX(-10deg) rotateY(20deg)" }}
+          className="absolute top-1/3 right-[12%] w-20 h-20 rounded-xl bg-gradient-to-br from-accent/25 to-primary/25 border border-accent/30 backdrop-blur-sm"
         />
         <motion.div 
-          animate={{ y: [-15, 15, -15], rotateZ: [0, 3, 0] }}
+          style={{ y: layer5Y, rotate: rotate3 }}
+          animate={{ y: [-15, 15, -15] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-1/3 left-[20%] w-12 h-12 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 border border-primary/15 backdrop-blur-sm"
-          style={{ transform: "perspective(1000px) rotateX(20deg) rotateY(10deg)" }}
+          className="absolute bottom-1/3 left-[18%] w-14 h-14 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 backdrop-blur-sm"
+        />
+        
+        {/* Additional parallax floating elements */}
+        <motion.div 
+          style={{ y: layer3Y, rotate: rotate1 }}
+          animate={{ y: [10, -10, 10], x: [-5, 5, -5] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[20%] right-[25%] w-8 h-8 rounded-full bg-primary/30 blur-sm"
+        />
+        <motion.div 
+          style={{ y: layer5Y, rotate: rotate2 }}
+          animate={{ y: [-8, 8, -8], x: [3, -3, 3] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[25%] right-[20%] w-6 h-6 rounded-full bg-accent/40 blur-sm"
+        />
+        <motion.div 
+          style={{ y: layer2Y }}
+          animate={{ y: [12, -12, 12] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[45%] left-[8%] w-10 h-10 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 border border-border/20 backdrop-blur-sm rotate-45"
+        />
+        <motion.div 
+          style={{ y: layer4Y, rotate: rotate3 }}
+          animate={{ y: [-18, 18, -18] }}
+          transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[40%] left-[30%] w-16 h-16 rounded-2xl border border-primary/20 bg-gradient-to-br from-transparent to-primary/5 backdrop-blur-sm"
+        />
+        <motion.div 
+          style={{ y: layer3Y }}
+          animate={{ y: [15, -15, 15], rotate: [0, 180, 360] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[60%] right-[10%] w-12 h-12 border border-accent/30 bg-accent/5 backdrop-blur-sm"
+          // Diamond shape
+        />
+
+        {/* Floating orbs with glow */}
+        <motion.div 
+          style={{ y: layer1Y }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[15%] left-[40%] w-4 h-4 rounded-full bg-primary shadow-[0_0_20px_10px_hsl(var(--primary)/0.3)]"
+        />
+        <motion.div 
+          style={{ y: layer2Y }}
+          animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[20%] right-[35%] w-3 h-3 rounded-full bg-accent shadow-[0_0_15px_8px_hsl(var(--accent)/0.3)]"
+        />
+        <motion.div 
+          style={{ y: layer4Y }}
+          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute top-[70%] left-[15%] w-2 h-2 rounded-full bg-primary shadow-[0_0_12px_6px_hsl(var(--primary)/0.4)]"
         />
 
         <div className="container mx-auto px-6 relative z-10 text-center">
