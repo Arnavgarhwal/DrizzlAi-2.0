@@ -13,7 +13,7 @@ export const Hero = () => {
           playsInline
           className="absolute w-full h-full object-cover"
         >
-          <source src="/videos/hero-bg.webm" type="video/webm" />
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
         </video>
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-background/70" />
