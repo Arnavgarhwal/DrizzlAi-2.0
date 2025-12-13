@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,15 +8,20 @@ import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "next-themes";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageTransition } from "@/components/PageTransition";
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Work from "./pages/Work";
-import ProjectDetail from "./pages/ProjectDetail";
-import Blog from "./pages/Blog";
-import Contact from "./pages/Contact";
-import GetStarted from "./pages/GetStarted";
-import NotFound from "./pages/NotFound";
+import { ScrollProgress } from "@/components/ScrollProgress";
+import { AppointmentBooking } from "@/components/AppointmentBooking";
+import { LiveChat } from "@/components/LiveChat";
+import { PageLoader } from "@/components/PageLoader";
+
+const Index = lazy(() => import("./pages/Index"));
+const About = lazy(() => import("./pages/About"));
+const Services = lazy(() => import("./pages/Services"));
+const Work = lazy(() => import("./pages/Work"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const Blog = lazy(() => import("./pages/Blog"));
+const Contact = lazy(() => import("./pages/Contact"));
+const GetStarted = lazy(() => import("./pages/GetStarted"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -42,13 +48,18 @@ const AnimatedRoutes = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollProgress />
           <ScrollToTop />
-          <AnimatedRoutes />
+          <Suspense fallback={<PageLoader />}>
+            <AnimatedRoutes />
+          </Suspense>
+          <AppointmentBooking />
+          <LiveChat />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
