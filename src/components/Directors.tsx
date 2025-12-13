@@ -1,26 +1,26 @@
-import { Linkedin, Twitter, Instagram } from "lucide-react";
+import { Linkedin, Instagram } from "lucide-react";
 import { TiltCard } from "./TiltCard";
+import arnavPhoto from "@/assets/arnav-garhwal.png";
+import vedantPhoto from "@/assets/vedant-chavan.png";
 
 const directors = [
   {
-    name: "Alexander Mitchell",
-    role: "CEO & Founder",
+    name: "Arnav Garhwal",
+    role: "CEO & Director",
     post: "Chief Executive Officer",
     badge: "Founder",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=face",
-    linkedin: "#",
-    twitter: "#",
-    instagram: "#",
+    image: arnavPhoto,
+    linkedin: "https://www.linkedin.com/in/arnavgarhwal/",
+    instagram: "https://www.instagram.com/arnavgarhwal/",
   },
   {
-    name: "Sarah Williams",
-    role: "Creative Director",
-    post: "Chief Creative Officer",
+    name: "Vedant Chavan",
+    role: "CTO & Director",
+    post: "Chief Technology Officer",
     badge: "Co-Founder",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop&crop=face",
-    linkedin: "#",
-    twitter: "#",
-    instagram: "#",
+    image: vedantPhoto,
+    linkedin: "https://www.linkedin.com/in/vedantchavan0501",
+    instagram: "https://www.instagram.com/vedant_0501/",
   },
 ];
 
@@ -85,14 +85,9 @@ export const Directors = () => {
                   {/* Social Links with Dividers */}
                   <div className="flex items-center justify-center gap-0">
                     <a
-                      href={director.twitter}
-                      className="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-300"
-                    >
-                      <Twitter className="w-5 h-5" />
-                    </a>
-                    <div className="w-px h-6 bg-border/50" />
-                    <a
                       href={director.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-300"
                     >
                       <Instagram className="w-5 h-5" />
@@ -100,6 +95,8 @@ export const Directors = () => {
                     <div className="w-px h-6 bg-border/50" />
                     <a
                       href={director.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-12 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-300"
                     >
                       <Linkedin className="w-5 h-5" />
