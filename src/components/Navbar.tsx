@@ -8,7 +8,7 @@ const navLinks = [
   { name: "Work", href: "/work", isHash: false },
   { name: "Blog", href: "/blog", isHash: false },
   { name: "About", href: "/about", isHash: false },
-  { name: "Contact", href: "/#contact", isHash: true },
+  { name: "Contact", href: "/contact", isHash: false },
 ];
 
 export const Navbar = () => {
