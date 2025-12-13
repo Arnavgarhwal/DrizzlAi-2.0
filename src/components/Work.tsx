@@ -1,4 +1,11 @@
 import { ArrowUpRight } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const projects = [
   {
@@ -45,31 +52,61 @@ export const Work = () => {
           </a>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <div
-              key={project.title}
-              className="group relative overflow-hidden rounded-2xl bg-card border border-border card-hover cursor-pointer"
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <span className="text-primary text-sm font-medium">{project.category}</span>
-                <h3 className="font-display text-2xl font-bold mt-2 text-foreground">{project.title}</h3>
-              </div>
-              <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100">
-                <ArrowUpRight className="w-5 h-5 text-primary-foreground" />
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Projects Carousel */}
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-4">
+            {projects.map((project, index) => (
+              <CarouselItem key={project.title} className="pl-4 md:basis-1/2 lg:basis-1/2">
+                <div
+                  className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 cursor-pointer transform transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2 hover:shadow-[0_25px_50px_-12px_hsl(var(--primary)/0.25)]"
+                  style={{
+                    animation: `float-3d ${3 + index * 0.5}s ease-in-out infinite`,
+                    animationDelay: `${index * 0.2}s`,
+                  }}
+                >
+                  {/* 3D Glow Effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative">
+                    <div className="aspect-[4/3] overflow-hidden rounded-t-2xl">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                      />
+                    </div>
+                    
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+                    
+                    {/* Content */}
+                    <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                      <span className="text-primary text-sm font-medium uppercase tracking-wider">{project.category}</span>
+                      <h3 className="font-display text-2xl font-bold mt-2 text-foreground drop-shadow-lg">{project.title}</h3>
+                    </div>
+                    
+                    {/* Arrow Button */}
+                    <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100 shadow-[0_10px_30px_hsl(var(--primary)/0.4)]">
+                      <ArrowUpRight className="w-5 h-5 text-primary-foreground" />
+                    </div>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          
+          {/* Navigation */}
+          <div className="flex justify-center gap-4 mt-8">
+            <CarouselPrevious className="relative inset-0 translate-x-0 translate-y-0 h-12 w-12 border-border/50 bg-card/50 backdrop-blur-sm hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 hover:scale-110 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.3)]" />
+            <CarouselNext className="relative inset-0 translate-x-0 translate-y-0 h-12 w-12 border-border/50 bg-card/50 backdrop-blur-sm hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300 hover:scale-110 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.3)]" />
+          </div>
+        </Carousel>
       </div>
     </section>
   );
