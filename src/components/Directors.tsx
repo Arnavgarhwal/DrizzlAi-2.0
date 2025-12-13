@@ -6,7 +6,6 @@ const directors = [
     role: "CEO & Founder",
     post: "Chief Executive Officer",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=face",
-    status: "Available for work",
     linkedin: "#",
     twitter: "#",
     instagram: "#",
@@ -16,7 +15,6 @@ const directors = [
     role: "Creative Director",
     post: "Chief Creative Officer",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop&crop=face",
-    status: "Available for work",
     linkedin: "#",
     twitter: "#",
     instagram: "#",
@@ -70,12 +68,6 @@ export const Directors = () => {
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  
-                  {/* Status Badge */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full border border-border/30">
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-sm text-foreground/90 whitespace-nowrap">{director.status}</span>
-                  </div>
                 </div>
 
                 {/* Info */}
