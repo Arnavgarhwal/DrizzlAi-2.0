@@ -5,6 +5,7 @@ const directors = [
     name: "Alexander Mitchell",
     role: "CEO & Founder",
     post: "Chief Executive Officer",
+    badge: "Founder",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=face",
     linkedin: "#",
     twitter: "#",
@@ -14,6 +15,7 @@ const directors = [
     name: "Sarah Williams",
     role: "Creative Director",
     post: "Chief Creative Officer",
+    badge: "Co-Founder",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop&crop=face",
     linkedin: "#",
     twitter: "#",
@@ -68,6 +70,11 @@ export const Directors = () => {
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  
+                  {/* Badge */}
+                  <div className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm px-4 py-1.5 rounded-full">
+                    <span className="text-sm font-semibold text-primary-foreground">{director.badge}</span>
+                  </div>
                 </div>
 
                 {/* Info */}
