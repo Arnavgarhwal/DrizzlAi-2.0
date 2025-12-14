@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, X, User, Mail, Phone, Globe } from "lucide-react";
+import { Calendar, X, User, Mail, Phone, Globe, Sparkles, Video, MessageSquare, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +22,38 @@ const timezones = [
 const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
 const minutes = ["00", "15", "30", "45"];
 
+// 3D Floating Tab Component
+const FloatingTab = ({ 
+  children, 
+  delay = 0, 
+  className = "" 
+}: { 
+  children: React.ReactNode; 
+  delay?: number; 
+  className?: string;
+}) => (
+  <motion.div
+    className={`absolute ${className}`}
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ 
+      opacity: [0.4, 0.7, 0.4],
+      scale: [1, 1.05, 1],
+      y: [0, -10, 0],
+      rotateX: [0, 5, 0],
+      rotateY: [0, 10, 0],
+    }}
+    transition={{
+      duration: 4,
+      delay,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }}
+    style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
+  >
+    {children}
+  </motion.div>
+);
+
 export const AppointmentBooking = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(1);
@@ -40,9 +72,9 @@ export const AppointmentBooking = () => {
   });
 
   const consultationTypes = [
-    { id: "general", label: "General Consultation", duration: "30 min", durationMinutes: 30 },
-    { id: "project", label: "Project Discussion", duration: "45 min", durationMinutes: 45 },
-    { id: "strategy", label: "Strategy Session", duration: "60 min", durationMinutes: 60 },
+    { id: "general", label: "General Consultation", duration: "30 min", durationMinutes: 30, icon: MessageSquare, color: "from-cyan-500 to-blue-500" },
+    { id: "project", label: "Project Discussion", duration: "45 min", durationMinutes: 45, icon: Rocket, color: "from-purple-500 to-pink-500" },
+    { id: "strategy", label: "Strategy Session", duration: "60 min", durationMinutes: 60, icon: Sparkles, color: "from-orange-500 to-red-500" },
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,13 +98,11 @@ export const AppointmentBooking = () => {
 
     const consultationType = consultationTypes.find(c => c.id === formData.consultationType);
     const consultationLabel = consultationType?.label || formData.consultationType;
-    const durationMinutes = consultationType?.durationMinutes || 30;
     const formattedTime = getFormattedTime();
-    const timezoneInfo = timezones.find(tz => tz.id === formData.timezone);
 
     try {
-      // Send Discord notification
-      const discordPromise = supabase.functions.invoke('discord-notify', {
+      // Send Discord notification only
+      const { error } = await supabase.functions.invoke('discord-notify', {
         body: {
           type: 'booking',
           data: {
@@ -86,33 +116,13 @@ export const AppointmentBooking = () => {
         },
       });
 
-      // Send confirmation email with .ics attachment
-      const emailPromise = supabase.functions.invoke('send-booking-confirmation', {
-        body: {
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          consultationType: consultationLabel,
-          date: formData.date,
-          time: formattedTime,
-          timezone: formData.timezone,
-          timezoneOffset: timezoneInfo?.offset || "+05:30",
-          durationMinutes,
-        },
-      });
-
-      // Execute both in parallel
-      const [discordResult, emailResult] = await Promise.all([discordPromise, emailPromise]);
-
-      if (discordResult.error) {
-        console.error('Discord notification error:', discordResult.error);
-      }
-      if (emailResult.error) {
-        console.error('Email confirmation error:', emailResult.error);
+      if (error) {
+        console.error('Discord notification error:', error);
       }
 
       toast({
         title: "Call Booked!",
-        description: "We've sent you a confirmation email with calendar invite.",
+        description: "We'll get back to you shortly to confirm.",
       });
 
       setIsOpen(false);
@@ -145,38 +155,80 @@ export const AppointmentBooking = () => {
     switch (step) {
       case 1:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Select Consultation Type</h3>
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+          >
+            <h3 className="text-lg font-semibold text-foreground mb-6 text-center">Choose Your Session</h3>
             <div className="space-y-3">
-              {consultationTypes.map((type) => (
-                <button
-                  key={type.id}
-                  onClick={() => {
-                    setFormData({ ...formData, consultationType: type.id });
-                    setStep(2);
-                  }}
-                  className={`w-full p-4 rounded-xl border transition-all duration-300 text-left ${
-                    formData.consultationType === type.id
-                      ? "border-primary bg-primary/10"
-                      : "border-border/50 hover:border-primary/50 hover:bg-muted/50"
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-foreground">{type.label}</span>
-                    <span className="text-sm text-muted-foreground">{type.duration}</span>
-                  </div>
-                </button>
-              ))}
+              {consultationTypes.map((type, index) => {
+                const Icon = type.icon;
+                return (
+                  <motion.button
+                    key={type.id}
+                    onClick={() => {
+                      setFormData({ ...formData, consultationType: type.id });
+                      setStep(2);
+                    }}
+                    className={`w-full p-5 rounded-2xl border transition-all duration-500 text-left group relative overflow-hidden ${
+                      formData.consultationType === type.id
+                        ? "border-primary bg-primary/10 shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
+                        : "border-border/30 hover:border-primary/50 bg-background/50 backdrop-blur-sm"
+                    }`}
+                    initial={{ opacity: 0, y: 20, rotateX: -10 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ 
+                      scale: 1.02, 
+                      rotateY: 2,
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-r ${type.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                    <div className="flex items-center gap-4 relative z-10">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="font-semibold text-foreground block">{type.label}</span>
+                        <span className="text-sm text-muted-foreground">{type.duration}</span>
+                      </div>
+                      <motion.div
+                        className="w-8 h-8 rounded-full border-2 border-primary/30 flex items-center justify-center"
+                        whileHover={{ scale: 1.2, borderColor: "hsl(var(--primary))" }}
+                      >
+                        <motion.div 
+                          className={`w-3 h-3 rounded-full bg-primary ${formData.consultationType === type.id ? 'opacity-100' : 'opacity-0'}`}
+                          animate={{ scale: formData.consultationType === type.id ? 1 : 0 }}
+                        />
+                      </motion.div>
+                    </div>
+                  </motion.button>
+                );
+              })}
             </div>
-          </div>
+          </motion.div>
         );
       case 2:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Choose Date & Time</h3>
+          <motion.div 
+            className="space-y-5"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+          >
+            <h3 className="text-lg font-semibold text-foreground mb-4 text-center">Pick Your Slot</h3>
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="date">Preferred Date</Label>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Label htmlFor="date" className="text-sm font-medium">Preferred Date</Label>
                 <Input
                   id="date"
                   name="date"
@@ -184,15 +236,19 @@ export const AppointmentBooking = () => {
                   value={formData.date}
                   onChange={handleInputChange}
                   min={new Date().toISOString().split('T')[0]}
-                  className="mt-1"
+                  className="mt-2 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary transition-all"
                 />
-              </div>
+              </motion.div>
               
-              <div>
-                <Label>Preferred Time</Label>
-                <div className="flex gap-2 mt-1">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Label className="text-sm font-medium">Preferred Time</Label>
+                <div className="flex gap-2 mt-2">
                   <Select value={formData.hour} onValueChange={(v) => handleSelectChange("hour", v)}>
-                    <SelectTrigger className="w-20">
+                    <SelectTrigger className="w-20 bg-background/50 backdrop-blur-sm border-border/50">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -201,9 +257,9 @@ export const AppointmentBooking = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <span className="flex items-center text-muted-foreground">:</span>
+                  <span className="flex items-center text-muted-foreground text-xl">:</span>
                   <Select value={formData.minute} onValueChange={(v) => handleSelectChange("minute", v)}>
-                    <SelectTrigger className="w-20">
+                    <SelectTrigger className="w-20 bg-background/50 backdrop-blur-sm border-border/50">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -213,7 +269,7 @@ export const AppointmentBooking = () => {
                     </SelectContent>
                   </Select>
                   <Select value={formData.period} onValueChange={(v) => handleSelectChange("period", v)}>
-                    <SelectTrigger className="w-20">
+                    <SelectTrigger className="w-20 bg-background/50 backdrop-blur-sm border-border/50">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -222,13 +278,17 @@ export const AppointmentBooking = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
+              </motion.div>
 
-              <div>
-                <Label>Timezone</Label>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Label className="text-sm font-medium">Timezone</Label>
                 <Select value={formData.timezone} onValueChange={(v) => handleSelectChange("timezone", v)}>
-                  <SelectTrigger className="mt-1">
-                    <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+                  <SelectTrigger className="mt-2 bg-background/50 backdrop-blur-sm border-border/50">
+                    <Globe className="w-4 h-4 mr-2 text-primary" />
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -239,45 +299,58 @@ export const AppointmentBooking = () => {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </motion.div>
             </div>
             <div className="flex gap-3 mt-6">
-              <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
+              <Button variant="outline" onClick={() => setStep(1)} className="flex-1 bg-background/50 backdrop-blur-sm">
                 Back
               </Button>
               <Button 
                 onClick={() => setStep(3)} 
-                className="flex-1"
+                className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90"
                 disabled={!formData.date}
               >
                 Next
               </Button>
             </div>
-          </div>
+          </motion.div>
         );
       case 3:
         return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Your Details</h3>
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+          >
+            <h3 className="text-lg font-semibold text-foreground mb-4 text-center">Almost There!</h3>
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Full Name</Label>
-                <div className="relative mt-1">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <Label htmlFor="name" className="text-sm font-medium">Full Name</Label>
+                <div className="relative mt-2">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                   <Input
                     id="name"
                     name="name"
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="pl-10"
+                    className="pl-10 bg-background/50 backdrop-blur-sm border-border/50"
                   />
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <div className="relative mt-1">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                <div className="relative mt-2">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                   <Input
                     id="email"
                     name="email"
@@ -285,14 +358,18 @@ export const AppointmentBooking = () => {
                     placeholder="john@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="pl-10"
+                    className="pl-10 bg-background/50 backdrop-blur-sm border-border/50"
                   />
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="phone">Phone (Optional)</Label>
-                <div className="relative mt-1">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Label htmlFor="phone" className="text-sm font-medium">Phone (Optional)</Label>
+                <div className="relative mt-2">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                   <Input
                     id="phone"
                     name="phone"
@@ -300,24 +377,39 @@ export const AppointmentBooking = () => {
                     placeholder="+1 (555) 000-0000"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="pl-10"
+                    className="pl-10 bg-background/50 backdrop-blur-sm border-border/50"
                   />
                 </div>
-              </div>
+              </motion.div>
             </div>
             <div className="flex gap-3 mt-6">
-              <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
+              <Button variant="outline" onClick={() => setStep(2)} className="flex-1 bg-background/50 backdrop-blur-sm">
                 Back
               </Button>
-              <Button 
-                onClick={handleSubmit} 
-                className="flex-1"
-                disabled={!formData.name || !formData.email || isSubmitting}
-              >
-                {isSubmitting ? "Booking..." : "Book Call"}
-              </Button>
+              <motion.div className="flex-1">
+                <Button 
+                  onClick={handleSubmit} 
+                  className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-[0_0_30px_hsl(var(--primary)/0.4)]"
+                  disabled={!formData.name || !formData.email || isSubmitting}
+                  
+                >
+                  {isSubmitting ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    >
+                      <Sparkles className="w-5 h-5" />
+                    </motion.div>
+                  ) : (
+                    <>
+                      <Video className="w-4 h-4 mr-2" />
+                      Book Call
+                    </>
+                  )}
+                </Button>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         );
       default:
         return null;
@@ -343,63 +435,139 @@ export const AppointmentBooking = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/60 backdrop-blur-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
           >
+            {/* 3D Floating Background Elements */}
+            <FloatingTab delay={0} className="-top-10 -left-10 hidden md:block">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 backdrop-blur-sm flex items-center justify-center">
+                <Calendar className="w-8 h-8 text-cyan-400" />
+              </div>
+            </FloatingTab>
+            
+            <FloatingTab delay={0.5} className="-top-5 -right-5 hidden md:block">
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 backdrop-blur-sm flex items-center justify-center">
+                <Video className="w-6 h-6 text-purple-400" />
+              </div>
+            </FloatingTab>
+            
+            <FloatingTab delay={1} className="-bottom-10 -left-5 hidden md:block">
+              <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30 backdrop-blur-sm flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-orange-400" />
+              </div>
+            </FloatingTab>
+            
+            <FloatingTab delay={1.5} className="-bottom-5 -right-10 hidden md:block">
+              <div className="w-18 h-18 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 backdrop-blur-sm flex items-center justify-center p-4">
+                <MessageSquare className="w-6 h-6 text-green-400" />
+              </div>
+            </FloatingTab>
+
             <motion.div
-              className="relative w-full max-w-md bg-card border border-border/50 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-md bg-card/80 backdrop-blur-2xl border border-border/30 rounded-3xl shadow-2xl shadow-primary/10 overflow-hidden"
+              initial={{ scale: 0.8, opacity: 0, rotateX: -10 }}
+              animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+              exit={{ scale: 0.8, opacity: 0, rotateX: 10 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
+              style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
             >
+              {/* Animated gradient border */}
+              <motion.div 
+                className="absolute inset-0 rounded-3xl"
+                style={{
+                  background: "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))",
+                  backgroundSize: "200% 100%",
+                  padding: "1px",
+                  mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  maskComposite: "exclude",
+                  WebkitMaskComposite: "xor",
+                }}
+                animate={{
+                  backgroundPosition: ["0% 0%", "200% 0%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-border/50">
-                <h2 className="text-xl font-bold text-foreground">Book a Call</h2>
-                <button
+              <div className="flex items-center justify-between p-6 border-b border-border/30">
+                <div className="flex items-center gap-3">
+                  <motion.div 
+                    className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center"
+                    animate={{ rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  >
+                    <Video className="w-5 h-5 text-primary-foreground" />
+                  </motion.div>
+                  <h2 className="text-xl font-bold text-foreground">Book a Call</h2>
+                </div>
+                <motion.button
                   onClick={() => {
                     setIsOpen(false);
                     setStep(1);
                   }}
-                  className="p-2 hover:bg-muted rounded-full transition-colors"
+                  className="p-2 hover:bg-muted/50 rounded-full transition-colors"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <X className="w-5 h-5" />
-                </button>
+                </motion.button>
               </div>
 
               {/* Step Indicator */}
-              <div className="px-6 pt-4">
+              <div className="px-6 pt-5">
                 <div className="flex items-center gap-2">
                   {[1, 2, 3].map((s) => (
-                    <div
+                    <motion.div
                       key={s}
-                      className={`flex-1 h-1 rounded-full transition-colors ${
-                        s <= step ? "bg-primary" : "bg-muted"
+                      className={`flex-1 h-1.5 rounded-full transition-colors relative overflow-hidden ${
+                        s <= step ? "bg-primary" : "bg-muted/50"
                       }`}
-                    />
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ delay: s * 0.1 }}
+                    >
+                      {s <= step && (
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                          animate={{ x: ["-100%", "200%"] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: s * 0.2 }}
+                        />
+                      )}
+                    </motion.div>
                   ))}
+                </div>
+                <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+                  <span className={step >= 1 ? "text-primary" : ""}>Type</span>
+                  <span className={step >= 2 ? "text-primary" : ""}>Schedule</span>
+                  <span className={step >= 3 ? "text-primary" : ""}>Details</span>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-6">
-                {renderStep()}
+              <div className="p-6 min-h-[320px]">
+                <AnimatePresence mode="wait">
+                  {renderStep()}
+                </AnimatePresence>
               </div>
 
-              {/* Decorative elements */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+              {/* Decorative background elements */}
               <motion.div 
-                className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none"
+                className="absolute -bottom-32 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"
                 animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity }}
+                transition={{ duration: 5, repeat: Infinity }}
               />
               <motion.div 
-                className="absolute -top-20 -left-20 w-40 h-40 bg-accent/10 rounded-full blur-3xl pointer-events-none"
+                className="absolute -top-32 -left-32 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none"
                 animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
-                transition={{ duration: 4, repeat: Infinity }}
+                transition={{ duration: 5, repeat: Infinity }}
               />
             </motion.div>
           </motion.div>
