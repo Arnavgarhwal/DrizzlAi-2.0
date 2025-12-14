@@ -1,11 +1,26 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, X, Clock, Rocket, User, Mail, Phone } from "lucide-react";
+import { Calendar, X, User, Mail, Phone, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
+const timezones = [
+  { id: "Asia/Kolkata", label: "IST (India)", offset: "+05:30" },
+  { id: "America/New_York", label: "EST (New York)", offset: "-05:00" },
+  { id: "America/Los_Angeles", label: "PST (Los Angeles)", offset: "-08:00" },
+  { id: "Europe/London", label: "GMT (London)", offset: "+00:00" },
+  { id: "Europe/Paris", label: "CET (Paris)", offset: "+01:00" },
+  { id: "Asia/Dubai", label: "GST (Dubai)", offset: "+04:00" },
+  { id: "Asia/Singapore", label: "SGT (Singapore)", offset: "+08:00" },
+  { id: "Australia/Sydney", label: "AEST (Sydney)", offset: "+11:00" },
+];
+
+const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+const minutes = ["00", "15", "30", "45"];
 
 export const AppointmentBooking = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,23 +33,42 @@ export const AppointmentBooking = () => {
     phone: "",
     consultationType: "general",
     date: "",
-    time: "",
+    hour: "10",
+    minute: "00",
+    period: "AM",
+    timezone: "Asia/Kolkata",
   });
 
   const consultationTypes = [
-    { id: "general", label: "General Consultation", duration: "30 min" },
-    { id: "project", label: "Project Discussion", duration: "45 min" },
-    { id: "strategy", label: "Strategy Session", duration: "60 min" },
+    { id: "general", label: "General Consultation", duration: "30 min", durationMinutes: 30 },
+    { id: "project", label: "Project Discussion", duration: "45 min", durationMinutes: 45 },
+    { id: "strategy", label: "Strategy Session", duration: "60 min", durationMinutes: 60 },
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const getFormattedTime = () => {
+    return `${formData.hour}:${formData.minute} ${formData.period}`;
+  };
+
+  const getTimezoneLabel = () => {
+    return timezones.find(tz => tz.id === formData.timezone)?.label || formData.timezone;
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
-    const consultationLabel = consultationTypes.find(c => c.id === formData.consultationType)?.label || formData.consultationType;
+    const consultationType = consultationTypes.find(c => c.id === formData.consultationType);
+    const consultationLabel = consultationType?.label || formData.consultationType;
+    const durationMinutes = consultationType?.durationMinutes || 30;
+    const formattedTime = getFormattedTime();
+    const timezoneInfo = timezones.find(tz => tz.id === formData.timezone);
 
     try {
       // Send Discord notification
@@ -47,19 +81,22 @@ export const AppointmentBooking = () => {
             phone: formData.phone.trim() || 'Not provided',
             consultationType: consultationLabel,
             date: formData.date,
-            time: formData.time,
+            time: `${formattedTime} (${getTimezoneLabel()})`,
           },
         },
       });
 
-      // Send confirmation email
+      // Send confirmation email with .ics attachment
       const emailPromise = supabase.functions.invoke('send-booking-confirmation', {
         body: {
           name: formData.name.trim(),
           email: formData.email.trim(),
           consultationType: consultationLabel,
           date: formData.date,
-          time: formData.time,
+          time: formattedTime,
+          timezone: formData.timezone,
+          timezoneOffset: timezoneInfo?.offset || "+05:30",
+          durationMinutes,
         },
       });
 
@@ -75,7 +112,7 @@ export const AppointmentBooking = () => {
 
       toast({
         title: "Call Booked!",
-        description: "We've sent you a confirmation email.",
+        description: "We've sent you a confirmation email with calendar invite.",
       });
 
       setIsOpen(false);
@@ -86,7 +123,10 @@ export const AppointmentBooking = () => {
         phone: "",
         consultationType: "general",
         date: "",
-        time: "",
+        hour: "10",
+        minute: "00",
+        period: "AM",
+        timezone: "Asia/Kolkata",
       });
     } catch (error) {
       console.error('Error booking call:', error);
@@ -147,16 +187,58 @@ export const AppointmentBooking = () => {
                   className="mt-1"
                 />
               </div>
+              
               <div>
-                <Label htmlFor="time">Preferred Time</Label>
-                <Input
-                  id="time"
-                  name="time"
-                  type="time"
-                  value={formData.time}
-                  onChange={handleInputChange}
-                  className="mt-1"
-                />
+                <Label>Preferred Time</Label>
+                <div className="flex gap-2 mt-1">
+                  <Select value={formData.hour} onValueChange={(v) => handleSelectChange("hour", v)}>
+                    <SelectTrigger className="w-20">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {hours.map((h) => (
+                        <SelectItem key={h} value={h}>{h}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <span className="flex items-center text-muted-foreground">:</span>
+                  <Select value={formData.minute} onValueChange={(v) => handleSelectChange("minute", v)}>
+                    <SelectTrigger className="w-20">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {minutes.map((m) => (
+                        <SelectItem key={m} value={m}>{m}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={formData.period} onValueChange={(v) => handleSelectChange("period", v)}>
+                    <SelectTrigger className="w-20">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="AM">AM</SelectItem>
+                      <SelectItem value="PM">PM</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div>
+                <Label>Timezone</Label>
+                <Select value={formData.timezone} onValueChange={(v) => handleSelectChange("timezone", v)}>
+                  <SelectTrigger className="mt-1">
+                    <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timezones.map((tz) => (
+                      <SelectItem key={tz.id} value={tz.id}>
+                        {tz.label} ({tz.offset})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             <div className="flex gap-3 mt-6">
@@ -166,7 +248,7 @@ export const AppointmentBooking = () => {
               <Button 
                 onClick={() => setStep(3)} 
                 className="flex-1"
-                disabled={!formData.date || !formData.time}
+                disabled={!formData.date}
               >
                 Next
               </Button>
@@ -268,7 +350,7 @@ export const AppointmentBooking = () => {
             onClick={() => setIsOpen(false)}
           >
             <motion.div
-              className="relative w-full max-w-md bg-card border border-border/50 rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-card border border-border/50 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
