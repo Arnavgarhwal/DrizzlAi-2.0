@@ -29,7 +29,6 @@ const footerLinks = [
     title: "Company",
     links: [
       { label: "About Us", href: "/about" },
-      { label: "Careers", href: "/contact" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
     ],
@@ -37,9 +36,8 @@ const footerLinks = [
   {
     title: "Resources",
     links: [
-      { label: "Case Studies", href: "/work" },
-      { label: "FAQ", href: "/contact" },
-      { label: "Support", href: "/contact" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Support", href: "/support" },
     ],
   },
 ];
@@ -100,12 +98,12 @@ export const Footer = () => {
             © {new Date().getFullYear()} DrizzlAi. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm">
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+            </Link>
+            <Link to="/terms-of-service" className="text-muted-foreground hover:text-foreground transition-colors">
               Terms of Service
-            </a>
+            </Link>
           </div>
         </div>
       </div>

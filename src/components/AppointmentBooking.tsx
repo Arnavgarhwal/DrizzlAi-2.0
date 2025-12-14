@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import confetti from "canvas-confetti";
 
 const timezones = [
   { id: "Asia/Kolkata", label: "IST (India)", offset: "+05:30" },
@@ -93,6 +94,28 @@ export const AppointmentBooking = () => {
     return timezones.find(tz => tz.id === formData.timezone)?.label || formData.timezone;
   };
 
+  const triggerConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 },
+      zIndex: 9999,
+    };
+
+    function fire(particleRatio: number, opts: confetti.Options) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, { spread: 26, startVelocity: 55, scalar: 0.8, colors: ['#00D4FF', '#00FF88'] });
+    fire(0.2, { spread: 60, scalar: 1.2, colors: ['#FF00FF', '#00D4FF'] });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8, colors: ['#FFD700', '#FF6B6B'] });
+    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2, colors: ['#00FF88', '#00D4FF'] });
+    fire(0.1, { spread: 120, startVelocity: 45, scalar: 1.1, colors: ['#FF00FF', '#FFD700'] });
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -120,8 +143,11 @@ export const AppointmentBooking = () => {
         console.error('Discord notification error:', error);
       }
 
+      // Trigger confetti celebration
+      triggerConfetti();
+
       toast({
-        title: "Call Booked!",
+        title: "🎉 Call Booked!",
         description: "We'll get back to you shortly to confirm.",
       });
 
@@ -140,8 +166,9 @@ export const AppointmentBooking = () => {
       });
     } catch (error) {
       console.error('Error booking call:', error);
+      triggerConfetti();
       toast({
-        title: "Booking Submitted",
+        title: "🎉 Booking Submitted",
         description: "We'll get back to you soon!",
       });
       setIsOpen(false);
@@ -223,21 +250,54 @@ export const AppointmentBooking = () => {
           >
             <h3 className="text-lg font-semibold text-foreground mb-4 text-center">Pick Your Slot</h3>
             <div className="space-y-4">
+              {/* 3D Floating Calendar Container */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                className="relative"
+                initial={{ opacity: 0, y: 20, rotateX: -15 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
               >
-                <Label htmlFor="date" className="text-sm font-medium">Preferred Date</Label>
-                <Input
-                  id="date"
-                  name="date"
-                  type="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="mt-2 bg-background/50 backdrop-blur-sm border-border/50 focus:border-primary transition-all"
-                />
+                <motion.div
+                  className="relative bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/20 rounded-2xl p-4 overflow-hidden"
+                  whileHover={{ rotateY: 2, scale: 1.01 }}
+                  animate={{
+                    y: [0, -3, 0],
+                    boxShadow: [
+                      "0 10px 30px rgba(0, 212, 255, 0.1)",
+                      "0 15px 40px rgba(0, 212, 255, 0.15)",
+                      "0 10px 30px rgba(0, 212, 255, 0.1)"
+                    ]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  style={{ transformStyle: "preserve-3d" }}
+                >
+                  {/* Floating calendar icon */}
+                  <motion.div
+                    className="absolute -top-2 -right-2 w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg"
+                    animate={{ 
+                      rotate: [0, 5, -5, 0],
+                      y: [0, -5, 0]
+                    }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  >
+                    <Calendar className="w-5 h-5 text-primary-foreground" />
+                  </motion.div>
+                  
+                  <Label htmlFor="date" className="text-sm font-medium flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    Preferred Date
+                  </Label>
+                  <Input
+                    id="date"
+                    name="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="mt-2 bg-background/80 backdrop-blur-sm border-primary/30 focus:border-primary transition-all text-foreground"
+                  />
+                </motion.div>
               </motion.div>
               
               <motion.div
@@ -301,14 +361,15 @@ export const AppointmentBooking = () => {
                 </Select>
               </motion.div>
             </div>
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-3 mt-6 relative z-50">
               <Button variant="outline" onClick={() => setStep(1)} className="flex-1 bg-background/50 backdrop-blur-sm">
                 Back
               </Button>
               <Button 
                 onClick={() => setStep(3)} 
-                className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90"
+                className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90 relative z-50"
                 disabled={!formData.date}
+                type="button"
               >
                 Next
               </Button>
@@ -421,7 +482,7 @@ export const AppointmentBooking = () => {
       {/* Floating Book Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-medium rounded-full shadow-lg shadow-primary/30"
+        className="fixed bottom-32 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-medium rounded-full shadow-lg shadow-primary/30"
         whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(var(--primary), 0.4)" }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, y: 20 }}

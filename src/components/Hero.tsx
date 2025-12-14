@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { ParallaxBackground, FloatingParticles } from "@/components/ParallaxBackground";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -31,12 +32,12 @@ export const Hero = () => {
 
           {/* Single CTA */}
           <ScrollReveal animation="slideUp" delay={0.4}>
-            <a href="/get-started">
+            <Link to="/get-started">
               <Button variant="hero" size="lg">
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Button>
-            </a>
+            </Link>
           </ScrollReveal>
         </div>
       </div>
