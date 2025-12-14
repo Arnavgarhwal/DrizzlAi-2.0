@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import { ParallaxBackground, FloatingParticles } from "@/components/ParallaxBackground";
 
+// X (formerly Twitter) icon component
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
 export const Contact = () => {
   return (
     <section id="contact" className="py-32 relative overflow-hidden">
@@ -49,7 +56,7 @@ export const Contact = () => {
                 </ScrollReveal>
 
                 {/* Contact Info */}
-                <StaggerContainer className="grid md:grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-3xl mx-auto" staggerDelay={0.15}>
+                <StaggerContainer className="grid md:grid-cols-4 gap-8 pt-10 border-t border-border/50 max-w-4xl mx-auto" staggerDelay={0.15}>
                   <StaggerItem>
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center">
@@ -83,8 +90,24 @@ export const Contact = () => {
                         <Instagram className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <div className="text-sm text-muted-foreground">Follow Us</div>
+                        <div className="text-sm text-muted-foreground">Instagram</div>
                         <div className="font-medium group-hover:text-primary transition-colors">@drizzlai</div>
+                      </div>
+                    </a>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <a 
+                      href="https://x.com/DrizzlAi" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center gap-3 group"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <XIcon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">Twitter/X</div>
+                        <div className="font-medium group-hover:text-primary transition-colors">@DrizzlAi</div>
                       </div>
                     </a>
                   </StaggerItem>

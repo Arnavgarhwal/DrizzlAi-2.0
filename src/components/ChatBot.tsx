@@ -118,7 +118,7 @@ export const ChatBot = () => {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-primary/40 ${isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100"}`}
+        className={`fixed bottom-16 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-primary/40 ${isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100"}`}
         aria-label="Open chat"
       >
         <MessageCircle className="w-6 h-6 text-primary-foreground" />
@@ -126,7 +126,7 @@ export const ChatBot = () => {
 
       {/* Chat Window */}
       <div
-        className={`fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-100px)] bg-card border border-border rounded-2xl shadow-2xl shadow-black/20 flex flex-col overflow-hidden transition-all duration-300 ${isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"}`}
+        className={`fixed bottom-16 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-100px)] bg-card border border-border rounded-2xl shadow-2xl shadow-black/20 flex flex-col overflow-hidden transition-all duration-300 ${isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border bg-secondary/50">
