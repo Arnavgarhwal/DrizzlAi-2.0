@@ -15,6 +15,82 @@ interface BookingConfirmationRequest {
   consultationType: string;
   date: string;
   time: string;
+  timezone?: string;
+  timezoneOffset?: string;
+  durationMinutes?: number;
+}
+
+// Generate ICS calendar file content
+function generateICS(
+  name: string,
+  email: string,
+  consultationType: string,
+  date: string,
+  time: string,
+  timezone: string,
+  timezoneOffset: string,
+  durationMinutes: number
+): string {
+  // Parse date and time
+  const [year, month, day] = date.split('-').map(Number);
+  
+  // Parse time (12-hour format with AM/PM)
+  const timeMatch = time.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  let hours = 0;
+  let minutes = 0;
+  
+  if (timeMatch) {
+    hours = parseInt(timeMatch[1]);
+    minutes = parseInt(timeMatch[2]);
+    const period = timeMatch[3].toUpperCase();
+    
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
+  }
+
+  // Create start date in the specified timezone
+  const startDate = new Date(year, month - 1, day, hours, minutes);
+  const endDate = new Date(startDate.getTime() + durationMinutes * 60 * 1000);
+
+  // Format dates for ICS (YYYYMMDDTHHMMSS)
+  const formatICSDate = (d: Date): string => {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+  };
+
+  const now = new Date();
+  const uid = `${now.getTime()}-${Math.random().toString(36).substr(2, 9)}@drizzlai.com`;
+
+  // Get VTIMEZONE identifier
+  const tzid = timezone || 'Asia/Kolkata';
+  
+  return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//DrizzlAi//Booking System//EN
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${formatICSDate(now)}
+DTSTART;TZID=${tzid}:${formatICSDate(startDate)}
+DTEND;TZID=${tzid}:${formatICSDate(endDate)}
+SUMMARY:DrizzlAi ${consultationType}
+DESCRIPTION:Consultation call with DrizzlAi team.\\n\\nBooked by: ${name}\\nEmail: ${email}\\n\\nWe look forward to speaking with you!
+LOCATION:Video Call (Link will be sent separately)
+ORGANIZER;CN=DrizzlAi:mailto:hello.drizzleai@gmail.com
+ATTENDEE;CN=${name};RSVP=TRUE:mailto:${email}
+STATUS:CONFIRMED
+SEQUENCE:0
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Reminder: DrizzlAi ${consultationType} in 30 minutes
+END:VALARM
+END:VEVENT
+END:VCALENDAR`;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -24,7 +100,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, consultationType, date, time }: BookingConfirmationRequest = await req.json();
+    const { 
+      name, 
+      email, 
+      consultationType, 
+      date, 
+      time,
+      timezone = "Asia/Kolkata",
+      timezoneOffset = "+05:30",
+      durationMinutes = 30
+    }: BookingConfirmationRequest = await req.json();
 
     console.log("Sending booking confirmation to:", email);
 
@@ -36,10 +121,34 @@ const handler = async (req: Request): Promise<Response> => {
       day: 'numeric'
     });
 
+    // Get timezone display name
+    const timezoneDisplay = timezone.replace('_', ' ').split('/').pop() || timezone;
+
+    // Generate ICS content
+    const icsContent = generateICS(
+      name,
+      email,
+      consultationType,
+      date,
+      time,
+      timezone,
+      timezoneOffset,
+      durationMinutes
+    );
+
+    // Convert ICS to base64 for attachment
+    const icsBase64 = btoa(icsContent);
+
     const emailResponse = await resend.emails.send({
       from: "DrizzlAi <onboarding@resend.dev>",
       to: [email],
       subject: "Your Call with DrizzlAi is Confirmed! 🎉",
+      attachments: [
+        {
+          filename: "drizzlai-booking.ics",
+          content: icsBase64,
+        },
+      ],
       html: `
         <!DOCTYPE html>
         <html>
@@ -77,10 +186,21 @@ const handler = async (req: Request): Promise<Response> => {
                   <p style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0;">${formattedDate}</p>
                 </div>
                 
-                <div>
+                <div style="margin-bottom: 16px;">
                   <p style="color: #888; font-size: 12px; text-transform: uppercase; margin: 0 0 4px;">Time</p>
                   <p style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0;">${time}</p>
                 </div>
+
+                <div>
+                  <p style="color: #888; font-size: 12px; text-transform: uppercase; margin: 0 0 4px;">Timezone</p>
+                  <p style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0;">${timezoneDisplay} (UTC${timezoneOffset})</p>
+                </div>
+              </div>
+
+              <!-- Calendar Notice -->
+              <div style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 168, 204, 0.1)); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 12px; padding: 16px; margin: 24px 0;">
+                <p style="color: #00D4FF; font-size: 14px; font-weight: 600; margin: 0 0 8px;">📅 Add to Calendar</p>
+                <p style="color: #cccccc; font-size: 14px; margin: 0;">We've attached a calendar file (.ics) to this email. Open it to add this meeting to your calendar app.</p>
               </div>
 
               <p style="color: #cccccc; font-size: 16px; line-height: 1.6; margin: 24px 0 0;">
