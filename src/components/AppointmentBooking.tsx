@@ -1,9 +1,226 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, X, Clock, Rocket } from "lucide-react";
+import { Calendar, X, Clock, Rocket, User, Mail, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export const AppointmentBooking = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    consultationType: "general",
+    date: "",
+    time: "",
+  });
+
+  const consultationTypes = [
+    { id: "general", label: "General Consultation", duration: "30 min" },
+    { id: "project", label: "Project Discussion", duration: "45 min" },
+    { id: "strategy", label: "Strategy Session", duration: "60 min" },
+  ];
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.functions.invoke('discord-notify', {
+        body: {
+          type: 'booking',
+          data: {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim() || 'Not provided',
+            consultationType: consultationTypes.find(c => c.id === formData.consultationType)?.label || formData.consultationType,
+            date: formData.date,
+            time: formData.time,
+          },
+        },
+      });
+
+      if (error) {
+        console.error('Discord notification error:', error);
+      }
+
+      toast({
+        title: "Call Booked!",
+        description: "We'll send you a confirmation email shortly.",
+      });
+
+      setIsOpen(false);
+      setStep(1);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        consultationType: "general",
+        date: "",
+        time: "",
+      });
+    } catch (error) {
+      console.error('Error booking call:', error);
+      toast({
+        title: "Booking Submitted",
+        description: "We'll get back to you soon!",
+      });
+      setIsOpen(false);
+      setStep(1);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Select Consultation Type</h3>
+            <div className="space-y-3">
+              {consultationTypes.map((type) => (
+                <button
+                  key={type.id}
+                  onClick={() => {
+                    setFormData({ ...formData, consultationType: type.id });
+                    setStep(2);
+                  }}
+                  className={`w-full p-4 rounded-xl border transition-all duration-300 text-left ${
+                    formData.consultationType === type.id
+                      ? "border-primary bg-primary/10"
+                      : "border-border/50 hover:border-primary/50 hover:bg-muted/50"
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-foreground">{type.label}</span>
+                    <span className="text-sm text-muted-foreground">{type.duration}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Choose Date & Time</h3>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="date">Preferred Date</Label>
+                <Input
+                  id="date"
+                  name="date"
+                  type="date"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="time">Preferred Time</Label>
+                <Input
+                  id="time"
+                  name="time"
+                  type="time"
+                  value={formData.time}
+                  onChange={handleInputChange}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
+              <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
+                Back
+              </Button>
+              <Button 
+                onClick={() => setStep(3)} 
+                className="flex-1"
+                disabled={!formData.date || !formData.time}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Your Details</h3>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Full Name</Label>
+                <div className="relative mt-1">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="name"
+                    name="name"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <div className="relative mt-1">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="john@example.com"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="phone">Phone (Optional)</Label>
+                <div className="relative mt-1">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="+1 (555) 000-0000"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
+              <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
+                Back
+              </Button>
+              <Button 
+                onClick={handleSubmit} 
+                className="flex-1"
+                disabled={!formData.name || !formData.email || isSubmitting}
+              >
+                {isSubmitting ? "Booking..." : "Book Call"}
+              </Button>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -41,68 +258,44 @@ export const AppointmentBooking = () => {
               <div className="flex items-center justify-between p-6 border-b border-border/50">
                 <h2 className="text-xl font-bold text-foreground">Book a Call</h2>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    setStep(1);
+                  }}
                   className="p-2 hover:bg-muted rounded-full transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Coming Soon Content */}
-              <div className="p-8 text-center">
-                <motion.div
-                  className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{ 
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <Rocket className="w-12 h-12 text-primary" />
-                </motion.div>
-                
-                <motion.h3 
-                  className="text-3xl font-bold mb-3 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  Coming Soon
-                </motion.h3>
-                
-                <motion.p 
-                  className="text-muted-foreground mb-6"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  We're working hard to bring you an amazing booking experience. Stay tuned!
-                </motion.p>
+              {/* Step Indicator */}
+              <div className="px-6 pt-4">
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3].map((s) => (
+                    <div
+                      key={s}
+                      className={`flex-1 h-1 rounded-full transition-colors ${
+                        s <= step ? "bg-primary" : "bg-muted"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
 
-                <motion.div 
-                  className="flex items-center justify-center gap-2 text-sm text-muted-foreground"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <Clock className="w-4 h-4" />
-                  <span>Launching very soon</span>
-                </motion.div>
+              {/* Content */}
+              <div className="p-6">
+                {renderStep()}
               </div>
 
               {/* Decorative elements */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary" />
               <motion.div 
-                className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl"
+                className="absolute -bottom-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none"
                 animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
                 transition={{ duration: 4, repeat: Infinity }}
               />
               <motion.div 
-                className="absolute -top-20 -left-20 w-40 h-40 bg-accent/10 rounded-full blur-3xl"
+                className="absolute -top-20 -left-20 w-40 h-40 bg-accent/10 rounded-full blur-3xl pointer-events-none"
                 animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
                 transition={{ duration: 4, repeat: Infinity }}
               />

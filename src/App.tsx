@@ -5,14 +5,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { ThemeProvider } from "next-themes";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { AppointmentBooking } from "@/components/AppointmentBooking";
 import { LiveChat } from "@/components/LiveChat";
 import { PageLoader } from "@/components/PageLoader";
-import { SocialProofWidget } from "@/components/SocialProofWidget";
 
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
@@ -49,22 +47,19 @@ const AnimatedRoutes = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollProgress />
-          <ScrollToTop />
-          <Suspense fallback={<PageLoader />}>
-            <AnimatedRoutes />
-          </Suspense>
-          <AppointmentBooking />
-          <LiveChat />
-          <SocialProofWidget />
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <ScrollProgress />
+        <ScrollToTop />
+        <Suspense fallback={<PageLoader />}>
+          <AnimatedRoutes />
+        </Suspense>
+        <AppointmentBooking />
+        <LiveChat />
+      </BrowserRouter>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 
