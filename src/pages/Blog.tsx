@@ -4,108 +4,61 @@ import { useState, useMemo } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
+import { CRMLeadCapture } from "@/components/CRMLeadCapture";
 import { Input } from "@/components/ui/input";
 
 const blogPosts = [
   {
     id: 1,
-    title: "The Future of Web Design: AI-Powered Experiences",
-    excerpt: "Explore how artificial intelligence is revolutionizing the way we design and build websites, from automated layouts to personalized user experiences.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=500&fit=crop",
-    category: "Technology",
-    tags: ["AI", "Web Design", "Innovation", "UX"],
+    title: "How DrizzlAi Was Founded",
+    excerpt: "The origin story of DrizzlAi — from a small idea to a growing digital studio focused on stunning, modern experiences.",
+    image: "https://images.unsplash.com/photo-1542834369-f10ebf06d3cb?w=800&h=500&fit=crop",
+    category: "Company",
+    tags: ["Founding", "Story", "Culture"],
     author: "Arnav Garhwal",
-    date: "Dec 10, 2024",
+    date: "Dec 14, 2025",
     readTime: "5 min read",
     featured: true,
   },
   {
     id: 2,
-    title: "Mastering 3D Animations in Modern Web Development",
-    excerpt: "A comprehensive guide to implementing stunning 3D animations using CSS transforms, WebGL, and popular libraries like Three.js and Framer Motion.",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=500&fit=crop",
-    category: "Development",
-    tags: ["3D", "Animation", "CSS", "Three.js"],
-    author: "Vedant Chavan",
-    date: "Dec 8, 2024",
-    readTime: "8 min read",
+    title: "Background of Our Directors",
+    excerpt: "Meet the leadership behind DrizzlAi and learn about their backgrounds, inspirations, and vision for the future.",
+    image: "https://images.unsplash.com/photo-1515165562835-c4c7b8e2161d?w=800&h=500&fit=crop",
+    category: "Company",
+    tags: ["Leadership", "Directors", "Team"],
+    author: "Team DrizzlAi",
+    date: "Dec 10, 2025",
+    readTime: "6 min read",
     featured: true,
   },
   {
     id: 3,
-    title: "Building Scalable Design Systems",
-    excerpt: "Learn how to create and maintain design systems that scale with your organization while ensuring consistency across all digital products.",
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=500&fit=crop",
-    category: "Design",
-    tags: ["Design System", "UI", "Components", "Scalability"],
-    author: "Arnav Garhwal",
-    date: "Dec 5, 2024",
-    readTime: "6 min read",
-    featured: false,
-  },
-  {
-    id: 4,
-    title: "The Psychology of Color in UI Design",
-    excerpt: "Discover how color choices impact user behavior and learn to leverage color psychology to create more engaging interfaces.",
-    image: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&h=500&fit=crop",
-    category: "Design",
-    tags: ["Color Theory", "Psychology", "UI", "UX"],
-    author: "Vedant Chavan",
-    date: "Dec 2, 2024",
+    title: "Our Vision",
+    excerpt: "What drives DrizzlAi — a bold vision for crafting immersive, modern, and delightful web experiences.",
+    image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800&h=500&fit=crop",
+    category: "Company",
+    tags: ["Vision", "Mission", "Future"],
+    author: "DrizzlAi Editorial",
+    date: "Dec 8, 2025",
     readTime: "4 min read",
     featured: false,
   },
   {
-    id: 5,
-    title: "Performance Optimization Techniques for React Apps",
-    excerpt: "Essential strategies and best practices for optimizing React applications to deliver lightning-fast user experiences.",
-    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=500&fit=crop",
-    category: "Development",
-    tags: ["React", "Performance", "Optimization", "JavaScript"],
-    author: "Arnav Garhwal",
-    date: "Nov 28, 2024",
-    readTime: "7 min read",
-    featured: false,
-  },
-  {
-    id: 6,
-    title: "Crafting Memorable Brand Identities",
-    excerpt: "A deep dive into the process of creating brand identities that resonate with audiences and stand the test of time.",
-    image: "https://images.unsplash.com/photo-1634942537034-2531766767d1?w=800&h=500&fit=crop",
-    category: "Branding",
-    tags: ["Branding", "Identity", "Logo", "Strategy"],
-    author: "Vedant Chavan",
-    date: "Nov 25, 2024",
-    readTime: "5 min read",
-    featured: false,
-  },
-  {
-    id: 7,
-    title: "Responsive Design Best Practices for 2024",
-    excerpt: "Modern techniques for creating truly responsive websites that work seamlessly across all devices and screen sizes.",
-    image: "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=800&h=500&fit=crop",
-    category: "Development",
-    tags: ["Responsive", "Mobile", "CSS", "Design"],
-    author: "Arnav Garhwal",
-    date: "Nov 20, 2024",
-    readTime: "6 min read",
-    featured: false,
-  },
-  {
-    id: 8,
-    title: "Typography Trends Shaping Digital Design",
-    excerpt: "Explore the latest typography trends and learn how to choose and pair fonts that elevate your digital designs.",
-    image: "https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?w=800&h=500&fit=crop",
-    category: "Design",
-    tags: ["Typography", "Fonts", "Design", "Trends"],
-    author: "Vedant Chavan",
-    date: "Nov 15, 2024",
+    id: 4,
+    title: "Building for the Future at DrizzlAi",
+    excerpt: "An inside look at our approach to innovation, 3D UI, and performance for next‑gen websites.",
+    image: "https://images.unsplash.com/photo-1537498425277-480e5eafbb5b?w=800&h=500&fit=crop",
+    category: "Company",
+    tags: ["Innovation", "3D UI", "Performance"],
+    author: "DrizzlAi Editorial",
+    date: "Dec 5, 2025",
     readTime: "5 min read",
     featured: false,
   },
 ];
 
-const categories = ["All", "Technology", "Development", "Design", "Branding"];
+const categories = ["All", "Company"];
 
 const allTags = [...new Set(blogPosts.flatMap(post => post.tags))];
 
@@ -208,6 +161,34 @@ const Blog = () => {
                 </button>
               )}
             </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Diagonal 3D Floating Tabs */}
+      <section className="py-10">
+        <div className="container mx-auto px-6">
+          <motion.div
+            className="relative flex flex-wrap justify-center gap-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {blogPosts.map((post, i) => (
+              <motion.button
+                key={post.id}
+                onClick={() => setSelectedPost(post)}
+                className="px-6 py-3 rounded-2xl bg-card/60 border border-border/50 shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.25)] backdrop-blur-sm text-sm font-medium hover:border-primary/50 hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.35)]"
+                style={{ transformStyle: "preserve-3d" }}
+                initial={{ x: -40 * i, y: 20 * i, rotateZ: -6 }}
+                animate={{ x: [ -40 * i, 40 * i ], y: [ 20 * i, -20 * i ], rotateZ: [-6, 6, -6] }}
+                transition={{ duration: 6 + i, repeat: Infinity, ease: "easeInOut" }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {post.title}
+              </motion.button>
+            ))}
           </motion.div>
         </div>
       </section>
@@ -599,6 +580,13 @@ const Blog = () => {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* CRM Lead Capture Section */}
+      <section className="py-20 bg-muted/20">
+        <div className="container mx-auto px-6">
+          <CRMLeadCapture source="blog" variant="inline" />
         </div>
       </section>
 

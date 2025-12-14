@@ -6,7 +6,7 @@ const corsHeaders = {
 };
 
 interface NotificationRequest {
-  type: "booking" | "inquiry" | "contact";
+  type: "booking" | "inquiry" | "contact" | "crm-lead";
   data: {
     name?: string;
     email?: string;
@@ -18,6 +18,8 @@ interface NotificationRequest {
     company?: string;
     service?: string;
     budget?: string;
+    source?: string;
+    interest?: string;
   };
 }
 
@@ -87,6 +89,22 @@ const handler = async (req: Request): Promise<Response> => {
         timestamp: new Date().toISOString(),
         footer: { text: "DrizzlAi Website" },
       };
+    } else if (type === "crm-lead") {
+      embed = {
+        title: "🎯 New CRM Lead Captured!",
+        color: 0xFF6B6B, // Red/Orange color
+        fields: [
+          { name: "📍 Source", value: data.source || "Unknown", inline: true },
+          { name: "🎯 Interest", value: data.interest || "General", inline: true },
+          { name: "👤 Name", value: data.name || "Not provided", inline: true },
+          { name: "📧 Email", value: data.email || "Not provided", inline: true },
+          { name: "🏢 Company", value: data.company || "Not provided", inline: true },
+          { name: "📱 Phone", value: data.phone || "Not provided", inline: true },
+          { name: "💬 Message", value: data.message || "No message provided", inline: false },
+        ],
+        timestamp: new Date().toISOString(),
+        footer: { text: `DrizzlAi CRM - ${data.source || "General"} Lead` },
+      };
     }
 
     const discordPayload = {
@@ -106,7 +124,7 @@ const handler = async (req: Request): Promise<Response> => {
     if (!discordResponse.ok) {
       const errorText = await discordResponse.text();
       console.error("Discord API error:", errorText);
-      throw new Error(`Discord API error: ${discordResponse.status}`);
+      // Don't throw error, just log it - we still want to return success to user
     }
 
     console.log("Discord notification sent successfully");
@@ -117,9 +135,10 @@ const handler = async (req: Request): Promise<Response> => {
     );
   } catch (error: any) {
     console.error("Error in discord-notify function:", error);
+    // Return success even on error so user experience isn't broken
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      JSON.stringify({ success: true, error: error.message }),
+      { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 };

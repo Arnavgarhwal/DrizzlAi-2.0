@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink, Eye } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
+import { CRMLeadCapture } from "@/components/CRMLeadCapture";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { VideoTestimonials } from "@/components/VideoTestimonials";
@@ -426,6 +427,13 @@ const Work = () => {
               </Button>
             </Link>
           </motion.div>
+        </div>
+      </AnimatedSection>
+
+      {/* CRM Lead Capture Section */}
+      <AnimatedSection className="py-20 bg-muted/20">
+        <div className="container mx-auto px-6">
+          <CRMLeadCapture source="work" variant="inline" />
         </div>
       </AnimatedSection>
 

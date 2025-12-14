@@ -18,6 +18,10 @@
 @tailwind utilities;
 
 @layer base {
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
   :root {
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;

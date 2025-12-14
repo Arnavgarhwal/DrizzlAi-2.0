@@ -9,7 +9,6 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { PageTransition } from "@/components/PageTransition";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { AppointmentBooking } from "@/components/AppointmentBooking";
-import { LiveChat } from "@/components/LiveChat";
 import { PageLoader } from "@/components/PageLoader";
 
 const Index = lazy(() => import("./pages/Index"));
@@ -65,7 +64,6 @@ const App = () => (
           <AnimatedRoutes />
         </Suspense>
         <AppointmentBooking />
-        <LiveChat />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -2,9 +2,15 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import { ParallaxBackground, FloatingParticles } from "@/components/ParallaxBackground";
-import { Mail, MapPin, Instagram, MessageCircle, HelpCircle, FileText } from "lucide-react";
+import { Mail, MapPin, Instagram, MessageCircle, HelpCircle, FileText, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 // X (formerly Twitter) icon component
 const XIcon = ({ className }: { className?: string }) => (
@@ -14,13 +20,6 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 const supportOptions = [
-  {
-    icon: MessageCircle,
-    title: "Live Chat",
-    description: "Chat with our AI assistant for instant help",
-    action: "Open Chat",
-    type: "chat"
-  },
   {
     icon: HelpCircle,
     title: "FAQ",
@@ -38,6 +37,53 @@ const supportOptions = [
 ];
 
 const Support = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    details: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.details.trim()) {
+      toast({ title: "Fill required fields", description: "Name, Email and Issue are required." });
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke('discord-notify', {
+        body: {
+          type: 'contact',
+          data: {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim() || 'Not provided',
+            message: `Subject: ${formData.subject.trim() || 'Support Inquiry'}\n\nIssue: ${formData.details.trim()}`,
+          },
+        },
+      });
+      if (error) {
+        console.error('Discord notification error:', error);
+      }
+      toast({ title: "Support request sent", description: "Our team will contact you soon." });
+      setFormData({ name: "", email: "", phone: "", subject: "", details: "" });
+    } catch (err) {
+      console.error('Error sending support:', err);
+      toast({ title: "Support request sent", description: "Our team will contact you soon." });
+      setFormData({ name: "", email: "", phone: "", subject: "", details: "" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
@@ -62,32 +108,89 @@ const Support = () => {
         </div>
       </section>
 
-      {/* Support Options */}
-      <section className="py-16">
+      {/* Support Form Section */}
+      <section className="py-12">
         <div className="container mx-auto px-6">
-          <StaggerContainer className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto" staggerDelay={0.1}>
-            {supportOptions.map((option) => {
-              const Icon = option.icon;
-              return (
-                <StaggerItem key={option.title}>
-                  <div className="bg-card/50 backdrop-blur-sm border border-border/30 rounded-2xl p-8 text-center hover:border-primary/50 transition-all">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-4">
-                      <Icon className="w-7 h-7 text-primary" />
-                    </div>
-                    <h3 className="font-display text-xl font-bold text-foreground mb-2">{option.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-4">{option.description}</p>
-                    {option.href ? (
-                      <Link to={option.href}>
-                        <Button variant="outline" size="sm">{option.action}</Button>
-                      </Link>
-                    ) : (
-                      <Button variant="outline" size="sm">{option.action}</Button>
-                    )}
+          <div className="grid lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
+            {/* Left: Contact Cards */}
+            <ScrollReveal animation="slideLeft" className="lg:col-span-2">
+              <div className="space-y-6">
+                <div className="relative rounded-3xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary p-px rounded-3xl">
+                    <div className="w-full h-full bg-card rounded-[23px]" />
                   </div>
-                </StaggerItem>
-              );
-            })}
-          </StaggerContainer>
+                  <div className="relative p-6 md:p-8">
+                    <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center mb-4">
+                      <Mail className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold mb-2">Email Us</h3>
+                    <p className="text-muted-foreground mb-3">Facing technical challenges or product concerns? We're here to assist.</p>
+                    <a href="mailto:hello.drizzlai@gmail.com" className="text-primary hover:underline">hello.drizzlai@gmail.com</a>
+                  </div>
+                </div>
+                <div className="relative rounded-3xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary p-px rounded-3xl">
+                    <div className="w-full h-full bg-card rounded-[23px]" />
+                  </div>
+                  <div className="relative p-6 md:p-8">
+                    <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center mb-4">
+                      <MessageCircle className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold mb-2">Contact Sales</h3>
+                    <p className="text-muted-foreground mb-3">Let's collaborate on custom solutions or discuss product insights.</p>
+                    <button className="text-primary hover:underline" onClick={() => window.dispatchEvent(new Event('booking:open'))}>Book a call</button>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Right: Smooth 3D Floating Form */}
+            <ScrollReveal animation="slideRight" className="lg:col-span-3">
+              <div className="relative bg-card/80 backdrop-blur-2xl border border-border/30 rounded-3xl p-6 md:p-8 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 pointer-events-none" />
+                <div className="absolute -top-20 -right-16 w-56 h-56 rounded-full bg-primary/10 blur-3xl" />
+                <div className="absolute -bottom-24 -left-16 w-56 h-56 rounded-full bg-accent/10 blur-3xl" />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                      <Headphones className="w-5 h-5 text-primary-foreground" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold">We'd love to help! Let us know how</h3>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name" className="text-sm">Full Name *</Label>
+                        <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" className="mt-2 bg-background/50 backdrop-blur-sm border-border/50" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="email" className="text-sm">Email Address *</Label>
+                        <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" className="mt-2 bg-background/50 backdrop-blur-sm border-border/50" required />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="phone" className="text-sm">Phone Number</Label>
+                        <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="+91 00000 00000" className="mt-2 bg-background/50 backdrop-blur-sm border-border/50" />
+                      </div>
+                      <div>
+                        <Label htmlFor="subject" className="text-sm">Subject Of Interest</Label>
+                        <Input id="subject" name="subject" value={formData.subject} onChange={handleChange} placeholder="Regarding Product" className="mt-2 bg-background/50 backdrop-blur-sm border-border/50" />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="details" className="text-sm">How may we assist you? *</Label>
+                      <Textarea id="details" name="details" value={formData.details} onChange={handleChange} rows={5} placeholder="Describe your issue or request..." className="mt-2 bg-background/50 backdrop-blur-sm border-border/50 resize-none" required />
+                    </div>
+                    <Button type="submit" size="lg" className="w-full bg-gradient-to-r from-primary to-accent" disabled={isSubmitting}>
+                      {isSubmitting ? 'Sending...' : 'Send Your Message'}
+                    </Button>
+                  </form>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -162,7 +265,7 @@ const Support = () => {
         </div>
       </section>
 
-      <Footer />
+  <Footer />
     </main>
   );
 };

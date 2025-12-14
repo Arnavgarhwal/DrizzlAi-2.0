@@ -48,7 +48,7 @@ export const Contact = () => {
                 
                 <ScrollReveal animation="slideUp" delay={0.2}>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                    <Button variant="hero" size="lg">
+                    <Button variant="hero" size="lg" onClick={() => window.dispatchEvent(new Event('booking:open'))}>
                       Schedule a Call
                       <ArrowRight className="w-5 h-5" />
                     </Button>
