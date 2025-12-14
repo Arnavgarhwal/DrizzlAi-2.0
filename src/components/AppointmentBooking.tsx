@@ -34,28 +34,48 @@ export const AppointmentBooking = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
+    const consultationLabel = consultationTypes.find(c => c.id === formData.consultationType)?.label || formData.consultationType;
+
     try {
-      const { error } = await supabase.functions.invoke('discord-notify', {
+      // Send Discord notification
+      const discordPromise = supabase.functions.invoke('discord-notify', {
         body: {
           type: 'booking',
           data: {
             name: formData.name.trim(),
             email: formData.email.trim(),
             phone: formData.phone.trim() || 'Not provided',
-            consultationType: consultationTypes.find(c => c.id === formData.consultationType)?.label || formData.consultationType,
+            consultationType: consultationLabel,
             date: formData.date,
             time: formData.time,
           },
         },
       });
 
-      if (error) {
-        console.error('Discord notification error:', error);
+      // Send confirmation email
+      const emailPromise = supabase.functions.invoke('send-booking-confirmation', {
+        body: {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          consultationType: consultationLabel,
+          date: formData.date,
+          time: formData.time,
+        },
+      });
+
+      // Execute both in parallel
+      const [discordResult, emailResult] = await Promise.all([discordPromise, emailPromise]);
+
+      if (discordResult.error) {
+        console.error('Discord notification error:', discordResult.error);
+      }
+      if (emailResult.error) {
+        console.error('Email confirmation error:', emailResult.error);
       }
 
       toast({
         title: "Call Booked!",
-        description: "We'll send you a confirmation email shortly.",
+        description: "We've sent you a confirmation email.",
       });
 
       setIsOpen(false);
