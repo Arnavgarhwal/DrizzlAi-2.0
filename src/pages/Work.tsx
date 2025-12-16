@@ -430,12 +430,7 @@ const Work = () => {
         </div>
       </AnimatedSection>
 
-      {/* CRM Lead Capture Section */}
-      <AnimatedSection className="py-20 bg-muted/20">
-        <div className="container mx-auto px-6">
-          <CRMLeadCapture source="work" variant="inline" />
-        </div>
-      </AnimatedSection>
+      {/* CRM Lead Capture Section - removed per request */}
 
       <Footer />
       <ChatBot />

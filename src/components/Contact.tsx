@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, MapPin, Instagram } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Instagram, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import { ParallaxBackground, FloatingParticles } from "@/components/ParallaxBackground";
@@ -92,6 +92,22 @@ export const Contact = () => {
                       <div>
                         <div className="text-sm text-muted-foreground">Instagram</div>
                         <div className="font-medium group-hover:text-primary transition-colors">@drizzlai</div>
+                      </div>
+                    </a>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <a 
+                      href="https://www.linkedin.com/company/drizzlai/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center gap-3 group"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <Linkedin className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">LinkedIn</div>
+                        <div className="font-medium group-hover:text-primary transition-colors">DrizzlAi</div>
                       </div>
                     </a>
                   </StaggerItem>

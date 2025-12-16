@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ScrollReveal";
 import { ParallaxBackground, FloatingParticles } from "@/components/ParallaxBackground";
-import { Mail, MapPin, Instagram, MessageCircle, HelpCircle, FileText, Headphones } from "lucide-react";
+import { Mail, MapPin, Instagram, Linkedin, MessageCircle, HelpCircle, FileText, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -239,6 +239,22 @@ const Support = () => {
                       <div className="text-center">
                         <div className="text-sm text-muted-foreground">Instagram</div>
                         <div className="font-medium text-sm group-hover:text-primary transition-colors">@drizzlai</div>
+                      </div>
+                    </a>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <a 
+                      href="https://www.linkedin.com/company/drizzlai/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center gap-3 group"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <Linkedin className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">LinkedIn</div>
+                        <div className="font-medium text-sm group-hover:text-primary transition-colors">DrizzlAi</div>
                       </div>
                     </a>
                   </StaggerItem>

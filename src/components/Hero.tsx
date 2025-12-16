@@ -245,7 +245,7 @@ export const Hero = () => {
           {/* Subheading */}
           <ScrollReveal animation="slideUp" delay={0.2}>
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto">
-              Crafting digital experiences that inspire.
+              Built with Precision. Designed for Performance.
             </p>
           </ScrollReveal>
 

@@ -11,7 +11,7 @@ const XIcon = ({ className }: { className?: string }) => (
 const socialLinks = [
   { icon: XIcon, href: "https://x.com/DrizzlAi", label: "X" },
   { icon: Github, href: "#", label: "GitHub" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Linkedin, href: "https://www.linkedin.com/company/drizzlai/", label: "LinkedIn" },
   { icon: Instagram, href: "https://www.instagram.com/drizzlai/", label: "Instagram" },
 ];
 
