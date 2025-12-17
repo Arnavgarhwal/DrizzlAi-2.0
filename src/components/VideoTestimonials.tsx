@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, X, Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -43,6 +43,20 @@ export const VideoTestimonials = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleNext = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev + 1) % videoTestimonials.length);
+    setTimeout(() => setIsAnimating(false), 600);
+  }, [isAnimating]);
+
+  const handlePrev = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev - 1 + videoTestimonials.length) % videoTestimonials.length);
+    setTimeout(() => setIsAnimating(false), 600);
+  }, [isAnimating]);
+
   // Auto-slide effect
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,21 +65,9 @@ export const VideoTestimonials = () => {
       }
     }, 5000);
     return () => clearInterval(interval);
-  }, [activeIndex, isAnimating, selectedVideo]);
+  }, [activeIndex, isAnimating, selectedVideo, handleNext]);
 
-  const handleNext = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev + 1) % videoTestimonials.length);
-    setTimeout(() => setIsAnimating(false), 600);
-  };
-
-  const handlePrev = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev - 1 + videoTestimonials.length) % videoTestimonials.length);
-    setTimeout(() => setIsAnimating(false), 600);
-  };
+  
 
   const getCardStyle = (index: number) => {
     const diff = index - activeIndex;

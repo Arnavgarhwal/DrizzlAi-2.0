@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, MapPin } from "lucide-react";
 
@@ -15,42 +15,49 @@ const actions = [
   "checked out our portfolio"
 ];
 
-const getRandomItem = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+function getRandomItem<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-const generateNotification = () => ({
-  id: Date.now(),
-  city: getRandomItem(cities),
-  action: getRandomItem(actions),
-  timeAgo: `${Math.floor(Math.random() * 5) + 1} min ago`
-});
+type Notification = {
+  id: number;
+  city: string;
+  action: string;
+  timeAgo: string;
+};
+
+function generateNotification(): Notification {
+  return {
+    id: Date.now(),
+    city: getRandomItem(cities),
+    action: getRandomItem(actions),
+    timeAgo: `${Math.floor(Math.random() * 5) + 1} min ago`,
+  };
+}
 
 export const SocialProofWidget = () => {
-  const [notification, setNotification] = useState<ReturnType<typeof generateNotification> | null>(null);
+  const [notification, setNotification] = useState<Notification | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  const showNotification = useCallback(() => {
+    const newNotification = generateNotification();
+    setNotification(newNotification);
+    setIsVisible(true);
+
+    setTimeout(() => {
+      setIsVisible(false);
+      const nextDelay = Math.floor(Math.random() * 15000) + 15000;
+      setTimeout(showNotification, nextDelay);
+    }, 4000);
+  }, []);
+
   useEffect(() => {
-    // Initial delay before first notification
     const initialDelay = setTimeout(() => {
       showNotification();
     }, 5000);
 
     return () => clearTimeout(initialDelay);
-  }, []);
-
-  const showNotification = () => {
-    const newNotification = generateNotification();
-    setNotification(newNotification);
-    setIsVisible(true);
-
-    // Hide after 4 seconds
-    setTimeout(() => {
-      setIsVisible(false);
-      
-      // Show next notification after random interval (15-30 seconds)
-      const nextDelay = Math.floor(Math.random() * 15000) + 15000;
-      setTimeout(showNotification, nextDelay);
-    }, 4000);
-  };
+  }, [showNotification]);
 
   return (
     <AnimatePresence>

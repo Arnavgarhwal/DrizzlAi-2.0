@@ -1,3 +1,4 @@
+/// <reference path="../../../src/types/deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const corsHeaders = {
@@ -133,11 +134,11 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({ success: true, message: "Notification sent to Discord" }),
       { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in discord-notify function:", error);
-    // Return success even on error so user experience isn't broken
+    const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({ success: true, error: error.message }),
+      JSON.stringify({ success: true, error: message }),
       { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }

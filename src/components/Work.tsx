@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { TiltCard } from "./TiltCard";
 import { projects } from "@/data/projects";
@@ -22,12 +22,12 @@ export const Work = () => {
     setTimeout(() => setIsAnimating(false), 600);
   };
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setActiveIndex((prev) => (prev + 1) % carouselProjects.length);
     setTimeout(() => setIsAnimating(false), 600);
-  };
+  }, [isAnimating]);
 
   const handlePrev = () => {
     if (isAnimating) return;
@@ -43,7 +43,7 @@ export const Work = () => {
       }
     }, 4000);
     return () => clearInterval(interval);
-  }, [isAnimating]);
+  }, [isAnimating, handleNext]);
 
   const getCardStyle = (index: number) => {
     const diff = index - activeIndex;

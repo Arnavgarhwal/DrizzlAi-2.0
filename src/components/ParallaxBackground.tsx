@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, ReactNode } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform as motionTransform, useSpring } from "framer-motion";
 
 interface ParallaxLayerProps {
   children?: ReactNode;
@@ -22,15 +22,17 @@ export const ParallaxLayer = ({
 
   const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
 
-  const yRange = useTransform(scrollYProgress, [0, 1], [100 * speed, -100 * speed]);
-  const xRange = useTransform(scrollYProgress, [0, 1], [100 * speed, -100 * speed]);
+  const yRange = motionTransform(scrollYProgress, [0, 1], [100 * speed, -100 * speed]);
+  const xRange = motionTransform(scrollYProgress, [0, 1], [100 * speed, -100 * speed]);
+  const yRangeNeg = motionTransform(yRange, (v) => -v);
+  const xRangeNeg = motionTransform(xRange, (v) => -v);
 
   const y = useSpring(
-    direction === "up" ? yRange : direction === "down" ? useTransform(yRange, (v) => -v) : 0,
+    direction === "up" ? yRange : direction === "down" ? yRangeNeg : 0,
     springConfig
   );
   const x = useSpring(
-    direction === "left" ? xRange : direction === "right" ? useTransform(xRange, (v) => -v) : 0,
+    direction === "left" ? xRange : direction === "right" ? xRangeNeg : 0,
     springConfig
   );
 
@@ -60,11 +62,14 @@ export const ParallaxBackground = ({
 
   const springConfig = { stiffness: 50, damping: 20 };
 
-  const y1 = useSpring(useTransform(scrollYProgress, [0, 1], [0, -150 * intensity]), springConfig);
-  const y2 = useSpring(useTransform(scrollYProgress, [0, 1], [0, -80 * intensity]), springConfig);
-  const y3 = useSpring(useTransform(scrollYProgress, [0, 1], [0, -200 * intensity]), springConfig);
-  const rotate = useSpring(useTransform(scrollYProgress, [0, 1], [0, 30 * intensity]), springConfig);
-  const scale = useSpring(useTransform(scrollYProgress, [0, 1], [1, 1.2]), springConfig);
+  const y1 = useSpring(motionTransform(scrollYProgress, [0, 1], [0, -150 * intensity]), springConfig);
+  const y2 = useSpring(motionTransform(scrollYProgress, [0, 1], [0, -80 * intensity]), springConfig);
+  const y3 = useSpring(motionTransform(scrollYProgress, [0, 1], [0, -200 * intensity]), springConfig);
+  const rotate = useSpring(motionTransform(scrollYProgress, [0, 1], [0, 30 * intensity]), springConfig);
+  const scale = useSpring(motionTransform(scrollYProgress, [0, 1], [1, 1.2]), springConfig);
+  const rotateNeg = motionTransform(rotate, (r) => -r);
+  const rotateDouble = motionTransform(rotate, (r) => r * 2);
+  const y2Neg = motionTransform(y2, (v) => -v);
 
   if (variant === "orbs") {
     return (
@@ -94,7 +99,7 @@ export const ParallaxBackground = ({
         />
         <motion.div
           className="absolute bottom-32 right-20 w-24 h-24 border border-accent/20 rounded-full"
-          style={{ y: y2, rotate: useTransform(rotate, (r) => -r) }}
+          style={{ y: y2, rotate: rotateNeg }}
         />
         <motion.div
           className="absolute top-1/2 left-1/4 w-16 h-16 bg-primary/10 rounded-lg"
@@ -102,7 +107,7 @@ export const ParallaxBackground = ({
         />
         <motion.div
           className="absolute top-1/3 right-1/4 w-20 h-20 border-2 border-dashed border-primary/10 rounded-full"
-          style={{ y: y2, rotate: useTransform(rotate, (r) => r * 2) }}
+          style={{ y: y2, rotate: rotateDouble }}
         />
         <motion.div
           className="absolute bottom-1/4 left-1/3 w-12 h-12 bg-accent/10 rounded-full"
@@ -125,7 +130,7 @@ export const ParallaxBackground = ({
         />
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-accent/10 to-transparent"
-          style={{ y: useTransform(y2, (v) => -v) }}
+          style={{ y: y2Neg }}
         />
       </div>
     );
